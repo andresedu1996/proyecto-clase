@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ShopZone</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="main.css">
+</head>
+<body>
+    <!-- Barra de navegación -->
+    <nav class="navbar navbar-expand-lg bg-body-tertiary">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">
+                <img src="Logo.png" alt="ShopZone" width="150" height="150"> ShopZone
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="login.html">Iniciar sesión</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="register.html">Registrarse</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Ofertas</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Contacto</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Contenido principal -->
+    <main class="container mt-4">
+        <section class="mb-3">
+            <h2>¿Qué vas a pedir hoy?</h2>
+            <div class="row" id="tiendas">
+                <div class="col-md-4">
+                    <div class="card text-center p-3">
+                        <a href="tienda.html?nombre=tienda1">
+                            <img src="img/tienda1.png" class="card-img-top" alt="Tienda 1">
+                            <h5 class="mt-2">Tienda 1</h5>
+                        </a>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card text-center p-3">
+                        <a href="tienda.html?nombre=tienda2">
+                            <img src="img/tienda2.png" class="card-img-top" alt="Tienda 2">
+                            <h5 class="mt-2">Tienda 2</h5>
+                        </a>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card text-center p-3">
+                        <a href="tienda.html?nombre=tienda3">
+                            <img src="img/tienda3.png" class="card-img-top" alt="Tienda 3">
+                            <h5 class="mt-2">Tienda 3</h5>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Sección de sugerencias -->
+        <section class="mb-3">
+            <h2>Te sugerimos</h2>
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="card">
+                        <img src="img/sugerencia1.png" class="card-img-top" alt="Sugerencia 1">
+                        <div class="card-body">
+                            <h5 class="card-title">Toro Bravo</h5>
+                            <p class="card-text">Hasta 31% de descuento</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card">
+                        <img src="img/sugerencia2.png" class="card-img-top" alt="Sugerencia 2">
+                        <div class="card-body">
+                            <h5 class="card-title">Pollo Supremo</h5>
+                            <p class="card-text">Envío L.32</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card">
+                        <img src="img/sugerencia3.png" class="card-img-top" alt="Sugerencia 3">
+                        <div class="card-body">
+                            <h5 class="card-title">Popeyes</h5>
+                            <p class="card-text">Envío L.18</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card">
+                        <img src="img/sugerencia4.png" class="card-img-top" alt="Sugerencia 4">
+                        <div class="card-body">
+                            <h5 class="card-title">Baleadas Kennedy</h5>
+                            <p class="card-text">Envío L.18</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Sección de productos -->
+        <section>
+            <h2>Productos disponibles</h2>
+            <div class="row" id="productos">
+                <!-- Los productos se mostrarán aquí -->
+            </div>
+        </section>
+    </main>
+
+    <footer class="bg-dark text-white text-center p-3 mt-4">
+        <p>&copy; 2025 ShopZone</p>
+    </footer>
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="main.js"></script>
+</body>
+</html>

@@ -1,0 +1,38 @@
+<form id="register-form">
+    <label>Nombre:</label>
+    <input type="text" id="nombre" required>
+    <br>
+    <label>Email:</label>
+    <input type="email" id="email" required>
+    <br>
+    <label>Contraseña:</label>
+    <input type="password" id="password" required>
+    <br>
+    <label>Tipo:</label>
+    <select id="tipo">
+        <option value="cliente">Cliente</option>
+        <option value="admin">Administrador</option>
+    </select>
+    <br>
+    <button type="submit">Registrar</button>
+</form>
+
+<script>
+    document.getElementById("register-form").addEventListener("submit", async (event) => {
+        event.preventDefault();
+
+        const nombre = document.getElementById("nombre").value;
+        const email = document.getElementById("email").value;
+        const password = document.getElementById("password").value;
+        const tipo = document.getElementById("tipo").value;
+
+        const response = await fetch("http://localhost:3000/register", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ nombre, email, password, tipo })
+        });
+
+        const data = await response.json();
+        alert(data.message || data.error);
+    });
+</script>
