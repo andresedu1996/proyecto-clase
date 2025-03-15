@@ -45,3 +45,9 @@ CREATE TABLE ordenes (
     FOREIGN KEY (usuario_id) REFERENCES usuarios(id),
     FOREIGN KEY (producto_id) REFERENCES productos(id)
 );
+
+
+Para reiniciar el servidor si da problemas
+
+netstat -ano | findstr :3000
+taskkill /PID 28296 /F
