@@ -32,3 +32,54 @@ footer {
 .navbar .nav-link:hover {
     color: #ffd6a5 !important;
 }
+
+#register-form {
+    width: 100%;
+    max-width: 400px;
+    margin: 50px auto;
+    padding: 20px;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+#register-form label {
+    display: block;
+    margin-top: 10px;
+    font-weight: bold;
+    color: #343a40;
+    text-align: left;
+}
+
+#register-form input,
+#register-form select {
+    width: 100%;
+    padding: 10px;
+    margin-top: 5px;
+    border: 1px solid #ced4da;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+#register-form button {
+    width: 100%;
+    background-color: #f89234;
+    color: white;
+    border: none;
+    padding: 10px;
+    margin-top: 15px;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background 0.3s;
+}
+
+#register-form button:hover {
+    background-color: #d3782b;
+}
+
+#register-form select {
+    cursor: pointer;
+}

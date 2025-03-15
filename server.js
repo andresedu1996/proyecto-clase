@@ -13,7 +13,7 @@ app.use(express.static("public")); // Servir archivos estáticos desde la carpet
 app.use(express.json());
 app.use(bodyParser.json());
 app.use(express.urlencoded({ extended: true }));
-
+/*
 // Simulación de una base de datos de productos
 const productos = {
     tienda1: [
@@ -27,6 +27,7 @@ const productos = {
 };
 
 // Ruta para obtener productos según la tienda
+
 app.get("/productos", (req, res) => {
     const tienda = req.query.nombre;
     if (productos[tienda]) {
@@ -35,6 +36,29 @@ app.get("/productos", (req, res) => {
         res.status(404).json({ error: "Tienda no encontrada" });
     }
 });
+*/
+
+// Ruta para obtener productos desde la base de datos según la tienda
+app.get("/productos", (req, res) => {
+    const tienda = req.query.nombre; // Obtener el nombre de la tienda desde la URL
+
+    if (!tienda) {
+        return res.status(400).json({ error: "Falta el nombre de la tienda en la consulta" });
+    }
+
+    const query = `SELECT ID, nombre, descripcion, precio, unidades, imagen FROM productos WHERE tienda = ?`;
+
+    db.query(query, [tienda], (err, results) => {
+        if (err) {
+            console.error("Error al obtener productos:", err);
+            return res.status(500).json({ error: "Error en el servidor" });
+        }
+        res.json(results);
+    });
+});
+
+
+
 
 // Ruta para registrar usuarios con pool de conexiones
 app.post("/register", async (req, res) => {
