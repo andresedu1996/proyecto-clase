@@ -95,16 +95,17 @@ function realizarPedido() {
         cancelButtonText: "Cancelar"
     }).then((result) => {
         if (result.isConfirmed) {
-            // Aquí se crea una sesión de Stripe
-            fetch('/create-checkout-session', {  // Este endpoint estará en tu servidor backend
+            fetch('/create-checkout-session', {  
                 method: 'POST',
                 body: JSON.stringify({ carrito: carrito }),
-                headers: {
-                    'Content-Type': 'application/json'
-                }
+                headers: { 'Content-Type': 'application/json' }
             })
             .then(response => response.json())
             .then(session => {
+                // Vacía el carrito antes de redirigir a Stripe
+                localStorage.removeItem("carrito");
+                mostrarCarrito();  // Refrescar la vista del carrito
+                
                 // Redirige al usuario a la página de pago de Stripe
                 const stripe = Stripe('pk_test_51R37twCQDSjoSGpDeNFrhrtCqyZJVmoqvcLW0mPKWx2HDJuXLzTi6y6j6Ium2T7dIlUEeexW79hCQINYKWGxyYvF007cdqsniW');
                 stripe.redirectToCheckout({ sessionId: session.id });

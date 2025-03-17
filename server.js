@@ -142,6 +142,48 @@ app.post('/create-checkout-session', async (req, res) => {
     }
 });
 
+
+app.get('/success', (req, res) => {
+    res.send(` 
+        <html>
+            <head>
+                <meta charset="UTF-8">
+                <title>Pago Exitoso</title>
+                <script>
+                    localStorage.removeItem("carrito"); // Vaciar el carrito en el frontend
+                    setTimeout(() => {
+                        window.location.href = "http://localhost:3000/";
+                    }, 5000);
+                </script>
+            </head>
+            <body style="text-align: center; font-family: Arial, sans-serif;">
+                <h1>¡Pago realizado con éxito!</h1>
+                <p>Redirigiendo a la página principal en 5 segundos...</p>
+            </body>
+        </html>
+    `);
+});
+
+app.get('/cancel', (req, res) => {
+    res.send(`
+        <html>
+            <head>
+                <meta charset="UTF-8">
+                <title>Pago Cancelado</title>
+                <script>
+                    setTimeout(() => {
+                        window.location.href = "http://localhost:3000/";
+                    }, 5000);
+                </script>
+            </head>
+            <body style="text-align: center; font-family: Arial, sans-serif;">
+                <h1>Pago Cancelado</h1>
+                <p>Redirigiendo a la página principal en 5 segundos...</p>
+            </body>
+        </html>
+    `);
+});
+
 // Iniciar el servidor (debe llamarse solo una vez)
 app.listen(port, () => {
     console.log(`Servidor corriendo en http://localhost:${port}`);
