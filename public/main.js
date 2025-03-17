@@ -23,6 +23,7 @@ if (tiendaNombre) {
                 return;
             }
 
+            // Mostrar los productos
             data.forEach(producto => {
                 const div = document.createElement("div");
                 div.classList.add("col-md-4");
@@ -34,11 +35,19 @@ if (tiendaNombre) {
                             <p class="card-text">${producto.descripcion}</p>
                             <p class="text-success">$${producto.precio}</p>
                             <p>Unidades disponibles: ${producto.unidades}</p>
+                            <button class="btn btn-primary agregar-carrito" 
+                                data-id="${producto.ID}" 
+                                data-nombre="${producto.nombre}" 
+                                data-precio="${producto.precio}" 
+                                data-imagen="${producto.imagen}">Agregar al Carrito</button>
                         </div>
                     </div>
                 `;
                 productosContainer.appendChild(div);
             });
+
+            // Agregar eventos a los botones de "Agregar al Carrito"
+            agregarEventosCarrito();
         })
         .catch(error => {
             console.error("Error al cargar productos:", error);
@@ -48,38 +57,7 @@ if (tiendaNombre) {
     document.getElementById("titulo-tienda").textContent = "Tienda no encontrada";
 }
 
-document.addEventListener("DOMContentLoaded", function () {
-    cargarProductos();
-    agregarEventosCarrito();
-});
-
-function cargarProductos() {
-    fetch("productos.php")
-        .then(response => response.json())
-        .then(data => {
-            let contenedor = document.getElementById("productos");
-            contenedor.innerHTML = "";
-            data.forEach(producto => {
-                let div = document.createElement("div");
-                div.classList.add("col-md-4");
-                div.innerHTML = `
-                    <div class="card">
-                        <img src="${producto.imagen}" class="card-img-top" alt="${producto.nombre}">
-                        <div class="card-body">
-                            <h5 class="card-title">${producto.nombre}</h5>
-                            <p class="card-text">${producto.descripcion}</p>
-                            <p class="text-success">$${producto.precio}</p>
-                            <p>Unidades: ${producto.unidades}</p>
-                            <button class="btn btn-primary agregar-carrito" data-id="${producto.ID}" data-nombre="${producto.nombre}" data-precio="${producto.precio}" data-imagen="${producto.imagen}">Agregar al Carrito</button>
-                        </div>
-                    </div>
-                `;
-                contenedor.appendChild(div);
-            });
-            agregarEventosCarrito();
-        });
-}
-
+// Agregar eventos a los botones de agregar al carrito
 function agregarEventosCarrito() {
     document.querySelectorAll(".agregar-carrito").forEach(boton => {
         boton.addEventListener("click", function () {
@@ -90,8 +68,10 @@ function agregarEventosCarrito() {
 
             let producto = { id, nombre, precio, imagen, cantidad: 1 };
 
+            // Obtener carrito del localStorage
             let carrito = JSON.parse(localStorage.getItem("carrito")) || [];
 
+            // Verificar si el producto ya está en el carrito
             let index = carrito.findIndex(item => item.id === id);
             if (index !== -1) {
                 carrito[index].cantidad++;
@@ -99,8 +79,10 @@ function agregarEventosCarrito() {
                 carrito.push(producto);
             }
 
+            // Guardar carrito en localStorage
             localStorage.setItem("carrito", JSON.stringify(carrito));
-            
+
+            // Mostrar mensaje con Swal
             Swal.fire({
                 title: "Producto agregado",
                 text: `${nombre} se agregó al carrito`,

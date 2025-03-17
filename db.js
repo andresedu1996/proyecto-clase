@@ -7,13 +7,15 @@ const pool = mysql.createPool({
     database: "shopzone",
     connectionLimit: 10, // Número máximo de conexiones en el pool
 });
-/*
-connection.connect(err => {
+
+// Verificar la conexión
+pool.getConnection((err, connection) => {
     if (err) {
         console.error("Error de conexión a MySQL:", err);
         return;
     }
     console.log("Conectado a MySQL");
+    connection.release(); // Liberar la conexión después de usarla
 });
-*/
+
 module.exports = pool;

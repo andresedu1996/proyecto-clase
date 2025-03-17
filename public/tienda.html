@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,6 +9,7 @@
     <link rel="stylesheet" href="main.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
+
 <body>
     <nav class="navbar navbar-expand-lg bg-body-tertiary">
         <div class="container-fluid">
@@ -23,36 +25,89 @@
         <div class="row" id="productos"></div>
     </main>
 
-
-
     <script src="main.js"></script>
     <script>
+        // Fetch para cargar los productos
         fetch("productos.php")
-            .then(response => response.json())
-            .then(data => {
-                let contenedor = document.getElementById("productos");
-                data.forEach(producto => {
-                    let div = document.createElement("div");
-                    div.classList.add("col-md-4");
-                    div.innerHTML = `
-                        <div class="card">
-    <img src="${producto.imagen} " class="card-img-top" alt="${producto.nombre}">
-    <div class="card-body">
-        <h5 class="card-title">${producto.nombre}</h5>
-        <p class="card-text">${producto.descripcion}</p>
-        <p class="text-success">$${producto.precio}</p>
-        <p>Unidades: ${producto.unidades}</p>
-        <button class="btn btn-primary agregar-carrito" data-id="${producto.ID}" data-nombre="${producto.nombre}" data-precio="${producto.precio}" data-imagen="${producto.imagen}">Agregar al Carrito</button>
-    </div>
-</div>
-                    `;
-                    contenedor.appendChild(div);
-                });
+    .then(response => response.json())
+    .then(data => {
+        let contenedor = document.getElementById("productos");
+        data.forEach(producto => {
+            let div = document.createElement("div");
+            div.classList.add("col-md-4");
+
+            // Crear la estructura del card
+            let card = document.createElement("div");
+            card.classList.add("card");
+
+            let img = document.createElement("img");
+            img.src = producto.imagen;
+            img.classList.add("card-img-top");
+            img.alt = producto.nombre;
+
+            let cardBody = document.createElement("div");
+            cardBody.classList.add("card-body");
+
+            let title = document.createElement("h5");
+            title.classList.add("card-title");
+            title.innerText = producto.nombre;
+
+            let description = document.createElement("p");
+            description.classList.add("card-text");
+            description.innerText = producto.descripcion;
+
+            let price = document.createElement("p");
+            price.classList.add("text-success");
+            price.innerText = `$${producto.precio}`;
+
+            let unidades = document.createElement("p");
+            unidades.innerText = `Unidades: ${producto.unidades}`;
+
+            // Crear el botón de agregar al carrito
+            let button = document.createElement("button");
+            button.classList.add("btn", "btn-primary", "agregar-carrito");
+            button.setAttribute("data-id", producto.ID);
+            button.setAttribute("data-nombre", producto.nombre);
+            button.setAttribute("data-precio", producto.precio);
+            button.setAttribute("data-imagen", producto.imagen);
+            button.innerText = "Agregar al Carrito";
+
+            // Agregar todos los elementos a la estructura del card
+            cardBody.appendChild(title);
+            cardBody.appendChild(description);
+            cardBody.appendChild(price);
+            cardBody.appendChild(unidades);
+            cardBody.appendChild(button);
+            card.appendChild(img);
+            card.appendChild(cardBody);
+
+            // Agregar el card al contenedor
+            div.appendChild(card);
+            contenedor.appendChild(div);
+        });
+
+        // Agregar los event listeners a los botones
+        const botonesCarrito = document.querySelectorAll('.agregar-carrito');
+        botonesCarrito.forEach(boton => {
+            boton.addEventListener('click', function () {
+                const productoId = this.getAttribute('data-id');
+                const productoNombre = this.getAttribute('data-nombre');
+                const productoPrecio = this.getAttribute('data-precio');
+                const productoImagen = this.getAttribute('data-imagen');
+                alert(`Producto agregado al carrito: ${productoNombre}`);
+                console.log('ID:', productoId, 'Nombre:', productoNombre, 'Precio:', productoPrecio);
             });
+        });
+    })
+    .catch(error => {
+        console.error("Error al cargar productos:", error);
+    });
     </script>
+
 </body>
 
 <footer class="bg-dark text-white text-center p-3 mt-4">
     <p>&copy; 2025 ShopZone</p>
 </footer>
+
 </html>

@@ -83,3 +83,20 @@ footer {
 #register-form select {
     cursor: pointer;
 }
+
+.producto {
+    border: 1px solid #ccc;
+    padding: 15px;
+    margin: 10px;
+    background-color: white;
+    display: block !important;
+}
+
+.producto button {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+}
+#productos {
+    display: block !important;
+}

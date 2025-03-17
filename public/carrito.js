@@ -95,9 +95,24 @@ function realizarPedido() {
         cancelButtonText: "Cancelar"
     }).then((result) => {
         if (result.isConfirmed) {
-            localStorage.removeItem("carrito");
-            mostrarCarrito();
-            Swal.fire("Pedido realizado", "Tu pedido ha sido enviado", "success");
+            // Aquí se crea una sesión de Stripe
+            fetch('/create-checkout-session', {  // Este endpoint estará en tu servidor backend
+                method: 'POST',
+                body: JSON.stringify({ carrito: carrito }),
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(response => response.json())
+            .then(session => {
+                // Redirige al usuario a la página de pago de Stripe
+                const stripe = Stripe('pk_test_51R37twCQDSjoSGpDeNFrhrtCqyZJVmoqvcLW0mPKWx2HDJuXLzTi6y6j6Ium2T7dIlUEeexW79hCQINYKWGxyYvF007cdqsniW');
+                stripe.redirectToCheckout({ sessionId: session.id });
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                Swal.fire("Error", "Hubo un problema al procesar el pago", "error");
+            });
         }
     });
 }
