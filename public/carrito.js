@@ -8,6 +8,8 @@ function mostrarCarrito() {
     let carrito = JSON.parse(localStorage.getItem("carrito")) || [];
     let contenedor = document.getElementById("carrito");
     let total = 0;
+
+    
     
     contenedor.innerHTML = "";
     
@@ -79,8 +81,33 @@ function vaciarCarrito() {
     mostrarCarrito();
 }
 
+
+function calcularCostoEnvio(direccion) {
+    // Simulación de reglas de costo de envío
+    if (direccion.toLowerCase().includes("centro") || direccion.toLowerCase().includes("ciudad")) {
+        return 5.00; // Dentro de la ciudad
+    } else {
+        return 10.00; // Fuera de la ciudad
+    }
+}
+
+function actualizarCostoEnvio() {
+    let direccion = document.getElementById("direccion").value;
+    let costoEnvio = calcularCostoEnvio(direccion);
+    document.getElementById("costoEnvio").innerText = costoEnvio.toFixed(2);
+    
+    let total = parseFloat(document.getElementById("total").innerText);
+    let totalConEnvio = total + costoEnvio;
+    document.getElementById("totalConEnvio").innerText = totalConEnvio.toFixed(2);
+}
+
+document.getElementById("direccion").addEventListener("input", actualizarCostoEnvio);
+
 function realizarPedido() {
     let carrito = JSON.parse(localStorage.getItem("carrito")) || [];
+    let direccion = document.getElementById("direccion").value;
+    let costoEnvio = parseFloat(document.getElementById("costoEnvio").innerText);
+
     if (carrito.length === 0) {
         Swal.fire("Error", "El carrito está vacío", "error");
         return;
@@ -88,7 +115,7 @@ function realizarPedido() {
 
     Swal.fire({
         title: "Confirmar Pedido",
-        text: "¿Estás seguro de que quieres realizar el pedido?",
+        text: `Tu pedido será enviado a: ${direccion}. Costo de envío: $${costoEnvio}. ¿Confirmas?`,
         icon: "warning",
         showCancelButton: true,
         confirmButtonText: "Sí, confirmar",
@@ -97,16 +124,13 @@ function realizarPedido() {
         if (result.isConfirmed) {
             fetch('/create-checkout-session', {  
                 method: 'POST',
-                body: JSON.stringify({ carrito: carrito }),
+                body: JSON.stringify({ carrito: carrito, direccion: direccion, costoEnvio: costoEnvio }),
                 headers: { 'Content-Type': 'application/json' }
             })
             .then(response => response.json())
             .then(session => {
-                // Vacía el carrito antes de redirigir a Stripe
                 localStorage.removeItem("carrito");
-                mostrarCarrito();  // Refrescar la vista del carrito
-                
-                // Redirige al usuario a la página de pago de Stripe
+                mostrarCarrito();
                 const stripe = Stripe('pk_test_51R37twCQDSjoSGpDeNFrhrtCqyZJVmoqvcLW0mPKWx2HDJuXLzTi6y6j6Ium2T7dIlUEeexW79hCQINYKWGxyYvF007cdqsniW');
                 stripe.redirectToCheckout({ sessionId: session.id });
             })

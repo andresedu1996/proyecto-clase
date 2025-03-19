@@ -8,6 +8,12 @@
     <link rel="stylesheet" href="main.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
+
+<h3>Ubicación de Envío</h3>
+<div id="map" style="width: 100%; height: 400px;"></div>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyApoVw2YRyjWtvkj02sKM4kaOZDIO9XUV0&libraries=places"></script>
+<script src="maps.js"></script>
+
 <body>
     <nav class="navbar navbar-expand-lg bg-body-tertiary">
         <div class="container-fluid">
@@ -28,6 +34,12 @@
     </main>
     <script src="https://js.stripe.com/v3/"></script>
     <script src="carrito.js"></script>
+
+    <label for="direccion">Dirección de envío:</label>
+    <input type="text" id="direccion" placeholder="Ingresa tu dirección" required>
+    <p>Costo de Envío: $<span id="costoEnvio">0.00</span></p>
+    <h4>Total con Envío: $<span id="totalConEnvio">0.00</span></h4>
+
 </body>
 
 <footer class="bg-dark text-white text-center p-3 mt-4">

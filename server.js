@@ -16,6 +16,15 @@ app.use(express.json());
 app.use(bodyParser.json());
 app.use(express.urlencoded({ extended: true }));
 
+// Función para calcular el costo de envío basado en la dirección
+// Función para calcular el costo de envío según la dirección
+target_dir = {'zona1': 5, 'zona2': 10, 'zona3': 15};
+function calcularEnvio(direccion) {
+    return target_dir[direccion] || 0;
+}
+
+
+
 // Ruta para obtener productos desde la base de datos según la tienda
 app.get("/productos", (req, res) => {
     const tienda = req.query.nombre; // Obtener el nombre de la tienda desde la URL
@@ -76,28 +85,26 @@ app.post("/register", async (req, res) => {
 });
 
 // Ruta para procesar el pago con Stripe
+// Ruta para procesar el pago con Stripe
 app.post('/pagar', async (req, res) => {
-    const { items, token } = req.body; // items -> productos del carrito, token -> token de Stripe
-
+    const { items, token, direccion } = req.body;
     if (!items || !items.length) {
         return res.status(400).json({ error: 'El carrito está vacío' });
     }
-
-    // Calcular el total de la orden
-    const total = items.reduce((sum, item) => sum + item.precio * item.cantidad, 0);
-
+    let total = items.reduce((sum, item) => sum + item.precio * item.cantidad, 0);
+    const costoEnvio = calcularEnvio(direccion);
+    total += costoEnvio;
     try {
-        // Crear un PaymentIntent
         const paymentIntent = await stripe.paymentIntents.create({
-            amount: total * 100, // Stripe maneja los montos en centavos
+            amount: total * 100,
             currency: 'usd',
-            payment_method: token.id, // Token recibido del frontend
+            payment_method: token.id,
             confirmation_method: 'manual',
             confirm: true,
         });
-
         res.status(200).json({
-            clientSecret: paymentIntent.client_secret, // Este es el secreto que necesitas para confirmar el pago
+            clientSecret: paymentIntent.client_secret,
+            costoEnvio: costoEnvio
         });
     } catch (error) {
         console.error('Error al procesar el pago con Stripe:', error);
@@ -107,11 +114,19 @@ app.post('/pagar', async (req, res) => {
 
 // Ruta para crear la sesión de pago con Stripe
 app.post('/create-checkout-session', async (req, res) => {
-    const carrito = req.body.carrito;
+    const { carrito, direccion } = req.body;
 
-    // Verificar que el carrito sea válido
     if (!carrito || !Array.isArray(carrito) || carrito.length === 0) {
         return res.status(400).json({ error: "Carrito inválido" });
+    }
+
+    // Calcular total del carrito
+    let total = carrito.reduce((sum, producto) => sum + (producto.precio * 100 * producto.cantidad), 0);
+
+    // Agregar costo de envío
+    const costoEnvio = calcularEnvio(direccion);
+    if (costoEnvio > 0) {
+        total += costoEnvio * 100;
     }
 
     const line_items = carrito.map((producto) => ({
@@ -121,10 +136,24 @@ app.post('/create-checkout-session', async (req, res) => {
                 name: producto.nombre,
                 images: [producto.imagen],
             },
-            unit_amount: producto.precio * 100, // El precio debe ser en centavos
+            unit_amount: producto.precio * 100,
         },
         quantity: producto.cantidad,
     }));
+
+    // Agregar costo de envío como un producto adicional
+    if (costoEnvio > 0) {
+        line_items.push({
+            price_data: {
+                currency: 'usd',
+                product_data: {
+                    name: "Costo de envío",
+                },
+                unit_amount: costoEnvio * 100,
+            },
+            quantity: 1,
+        });
+    }
 
     try {
         const session = await stripe.checkout.sessions.create({
