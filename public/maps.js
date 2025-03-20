@@ -1,17 +1,25 @@
 let map;
 let directionsService;
 let directionsRenderer;
+let autocomplete;
 
 function initMap() {
     map = new google.maps.Map(document.getElementById("map"), {
-        center: { lat: 14.6349, lng: -90.5069 }, // Ciudad de Guatemala
+        center: { lat: 15.530261144379857, lng: -88.03202504600166 }, // Ceutec SC
         zoom: 12,
     });
 
     directionsService = new google.maps.DirectionsService();
     directionsRenderer = new google.maps.DirectionsRenderer();
     directionsRenderer.setMap(map);
+
+ // Habilitar Autocompletado en el input de dirección
+ let inputDireccion = document.getElementById("direccion");
+ autocomplete = new google.maps.places.Autocomplete(inputDireccion);
+ autocomplete.setFields(["formatted_address", "geometry"]); // Obtiene dirección formateada y coordenadas
 }
+
+
 
 function calcularRuta() {
     let direccionDestino = document.getElementById("direccion").value;
