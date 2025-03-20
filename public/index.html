@@ -5,9 +5,36 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ShopZone</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/jwt-decode@3.1.2/build/jwt-decode.min.js"></script>
+
     <link rel="stylesheet" href="main.css">
 </head>
 <body>
+
+    <script>
+       document.addEventListener("DOMContentLoaded", function () {
+    fetch("session.php")
+        .then(response => response.json())
+        .then(data => {
+            if (data.loggedin) {
+                // Ocultar botones de login y registro
+                document.querySelector(".nav-link[href='login.html']").style.display = "none";
+                document.querySelector(".nav-link[href='register.html']").style.display = "none";
+
+                // Ocultar opciones de administrador si no es admin
+                if (data.rol !== "admin") {
+                    document.querySelector(".nav-link[href='crear_tienda.html']").style.display = "none";
+                    document.querySelector(".nav-link[href='agregar_producto.html']").style.display = "none";
+                }
+
+                // Mostrar botón de logout
+                document.getElementById("logoutBtn").style.display = "inline-block";
+            }
+        });
+});
+        </script>
+
+
     <!-- Barra de navegación -->
     <nav class="navbar navbar-expand-lg bg-body-tertiary">
         <div class="container-fluid">
@@ -26,12 +53,23 @@
                         <a class="nav-link" href="register.html">Registrarse</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Ofertas</a>
+                        <a class="nav-link" href="crear_tienda.html">Crear Tienda</a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="agregar_producto.html">Agregar Productos</a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="logout.php">Cerrar Sesión</a>
+                    </li>
+
+
                     <li class="nav-item">
                         <a href="carrito.html" class="btn btn-success">🛒 Ver Carrito</a>
                     </li>
-
+                    <li class="nav-item" id="logoutBtn" style="display: none;">
+                        <a href="logout.php" class="btn btn-danger">Cerrar Sesión</a>
+                    </li>
                     
                 </ul>
             </div>
@@ -148,6 +186,8 @@
     <footer class="bg-dark text-white text-center p-3 mt-4">
         <p>&copy; 2025 ShopZone</p>
     </footer>
+    
+
     
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="main.js"></script>

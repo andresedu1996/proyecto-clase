@@ -46,6 +46,12 @@ CREATE TABLE ordenes (
     FOREIGN KEY (producto_id) REFERENCES productos(id)
 );
 
+CREATE TABLE tiendas (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nombre VARCHAR(255),
+    direccion VARCHAR(255),
+    telefono VARCHAR(50)
+);
 
 Para reiniciar el servidor si da problemas
 

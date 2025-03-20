@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registrar Tienda</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link rel="stylesheet" href="main.css">
+</head>
+
+
+<body>
+    <nav class="navbar navbar-expand-lg bg-body-tertiary">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="index.html">
+                <img src="Logo.png" alt="ShopZone" width="150" height="150"> ShopZone
+            </a>
+        </div>
+    </nav>
+
+
+
+    <div class="container mt-5">
+        <h2>Registrar Tienda</h2>
+        <form id="formTienda">
+            <div class="mb-3">
+                <label for="nombreTienda" class="form-label">Nombre de la Tienda</label>
+                <input type="text" class="form-control" id="nombreTienda" required>
+            </div>
+            <div class="mb-3">
+                <label for="direccionTienda" class="form-label">Dirección</label>
+                <input type="text" class="form-control" id="direccionTienda" required>
+                <button type="button" class="btn btn-secondary mt-2" onclick="buscarDireccion()">Buscar Dirección</button>
+            </div>
+            <div id="map" style="width: 100%; height: 300px; margin-top: 10px;"></div>
+            <div class="mb-3">
+                <label for="descripcionTienda" class="form-label">Descripción</label>
+                <textarea class="form-control" id="descripcionTienda" rows="3"></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary">Registrar Tienda</button>
+        </form>
+    </div>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script>
+        let map;
+        let marker;
+
+        // Inicialización del mapa
+        function initMap() {
+            map = L.map('map').setView([15.530261, -88.032025], 12);  // Coordenadas iniciales (puedes ajustarlas)
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '© OpenStreetMap contributors'
+            }).addTo(map);
+            marker = L.marker([15.530261, -88.032025]).addTo(map);  // Marcador inicial
+        }
+
+        // Función para buscar la dirección y obtener coordenadas
+        function buscarDireccion() {
+            let direccion = document.getElementById('direccionTienda').value;
+            if (!direccion) {
+                alert("Por favor ingresa una dirección.");
+                return;
+            }
+
+            fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${direccion}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.length === 0) {
+                        alert("Dirección no encontrada.");
+                        return;
+                    }
+
+                    let lat = data[0].lat;
+                    let lon = data[0].lon;
+
+                    // Actualizar mapa con la ubicación
+                    marker.setLatLng([lat, lon]);
+                    map.setView([lat, lon], 15);
+
+                    // Opcional: Mostrar la dirección obtenida en el campo
+                    document.getElementById('direccionTienda').value = data[0].display_name;
+                });
+        }
+
+        // Función para manejar el envío del formulario
+        function registrarTienda(event) {
+    event.preventDefault();  // Prevenir el envío del formulario por defecto
+
+    let nombre = document.getElementById('nombreTienda').value;
+    let direccion = document.getElementById('direccionTienda').value;
+    let descripcion = document.getElementById('descripcionTienda').value;
+
+    // Crear un objeto con los datos del formulario
+    let tiendaData = {
+        nombre: nombre,
+        direccion: direccion,
+        descripcion: descripcion
+    };
+
+    // Enviar los datos al servidor usando fetch
+    fetch('http://localhost:3000/guardar_tienda', {
+    method: 'POST',
+    headers: {
+        'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(tiendaData)
+})
+    .then(response => response.json())  // Esperar respuesta JSON
+    .then(data => {
+        console.log(data);  // Ver lo que devuelve el servidor
+        if (data.exito) {
+            alert(data.mensaje);
+        } else {
+            alert("Error: " + data.mensaje);
+        }
+    })
+    .catch(error => {
+        console.error("Error en la solicitud:", error);
+        alert("Hubo un problema al registrar la tienda.");
+    });
+
+        }
+
+        // Agregar el evento submit al formulario
+        document.getElementById('formTienda').addEventListener('submit', registrarTienda);
+
+        // Inicializar mapa
+        window.onload = initMap;
+    </script>
+</body>
+</html>

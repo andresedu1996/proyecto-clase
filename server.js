@@ -1,13 +1,21 @@
+require("dotenv").config(); // Cargar variables de entorno
+
 const express = require("express");
 const cors = require("cors");
 const bcrypt = require("bcryptjs");
 const bodyParser = require("body-parser");
 const db = require("./db");
+const jwt = require("jsonwebtoken");
 const stripe = require('stripe')('sk_test_51R37twCQDSjoSGpDw02h8G5qNaEnj1oF2zMIkjHPdoYe6srwfTVZAonZCJIuhfFJ0Adl35HB6zlnETjySpRScBAE00Yhl477oc');
 
 const app = express();
 const port = 3000;
 
+
+// Cargar la clave secreta desde las variables de entorno
+const SECRET_KEY = process.env.SECRET_KEY;
+
+console.log("Clave secreta cargada:", SECRET_KEY);
 
 // Middleware
 app.use(cors());
@@ -16,6 +24,7 @@ app.use(express.json());
 app.use(bodyParser.json());
 app.use(express.urlencoded({ extended: true }));
 
+
 // Función para calcular el costo de envío basado en la dirección
 // Función para calcular el costo de envío según la dirección
 target_dir = {'zona1': 5, 'zona2': 10, 'zona3': 15};
@@ -23,7 +32,24 @@ function calcularEnvio(direccion) {
     return target_dir[direccion] || 0;
 }
 
+app.post('/guardar_tienda', (req, res) => {
+    const { nombre, direccion, descripcion } = req.body;
 
+    // Aquí puedes guardar los datos en la base de datos o hacer lo que necesites
+    console.log('Tienda registrada:', req.body);
+
+    const query = "INSERT INTO tiendas (nombre, direccion, descripcion) VALUES (?, ?, ?)";
+    
+    db.query(query, [nombre, direccion, descripcion], (err, result) => {
+        if (err) {
+            console.error("Error al insertar tienda:", err);
+            return res.status(500).json({ error: "Error al guardar la tienda" });
+        }
+        
+        console.log("Tienda guardada en la base de datos:", result);
+        res.json({ exito: true, mensaje: 'Tienda registrada correctamente' });
+    });
+});
 
 // Ruta para obtener productos desde la base de datos según la tienda
 app.get("/productos", (req, res) => {
@@ -82,6 +108,27 @@ app.post("/register", async (req, res) => {
         console.error("Error en el hash de contraseña:", error);
         res.status(500).json({ error: "Error en el servidor" });
     }
+});
+
+
+// Ruta para verificar la sesión del usuario
+app.post("/login", (req, res) => {
+    const { email, password } = req.body;
+
+    db.query("SELECT * FROM usuarios WHERE email = ?", [email], async (err, results) => {
+        if (err) return res.status(500).json({ error: "Error en el servidor" });
+        if (results.length === 0) return res.status(401).json({ error: "Usuario no encontrado" });
+
+        const user = results[0];
+
+        const passwordMatch = await bcrypt.compare(password, user.password);
+        if (!passwordMatch) return res.status(401).json({ error: "Contraseña incorrecta" });
+
+        // Generar token JWT
+        const token = jwt.sign({ id: user.id, tipo: user.tipo }, SECRET_KEY, { expiresIn: "2h" });
+
+        res.json({ message: "Inicio de sesión exitoso", token, tipo: user.tipo });
+    });
 });
 
 // Ruta para procesar el pago con Stripe
