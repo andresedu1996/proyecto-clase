@@ -9,11 +9,6 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 
-<h3>Ubicación de Envío</h3>
-<div id="map" style="width: 100%; height: 400px;"></div>
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyApoVw2YRyjWtvkj02sKM4kaOZDIO9XUV0&libraries=places"></script>
-<script src="maps.js"></script>
-
 <body>
     <nav class="navbar navbar-expand-lg bg-body-tertiary">
         <div class="container-fluid">
@@ -31,14 +26,24 @@
             <button class="btn btn-danger" id="vaciar-carrito">Vaciar Carrito</button>
             <button class="btn btn-success" id="realizar-pedido">Realizar Pedido</button>
         </div>
+
+        <h3>Ubicación de Envío</h3>
+        <label for="direccion">Dirección de envío:</label>
+        <input type="text" id="direccion" placeholder="Ingresa tu dirección" required>
+        <button onclick="calcularRuta()" class="btn btn-primary mt-2">Calcular Ruta</button>
+        <div id="map" style="width: 100%; height: 400px; margin-top: 10px;"></div>
+        <p>Costo de Envío: $<span id="costoEnvio">0.00</span></p>
+        <h4>Total con Envío: $<span id="totalConEnvio">0.00</span></h4>
     </main>
+
     <script src="https://js.stripe.com/v3/"></script>
     <script src="carrito.js"></script>
 
-    <label for="direccion">Dirección de envío:</label>
-    <input type="text" id="direccion" placeholder="Ingresa tu dirección" required>
-    <p>Costo de Envío: $<span id="costoEnvio">0.00</span></p>
-    <h4>Total con Envío: $<span id="totalConEnvio">0.00</span></h4>
+    <!-- API de Google Maps (corregido con async defer y callback) -->
+    <script async defer 
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyApoVw2YRyjWtvkj02sKM4kaOZDIO9XUV0&libraries=places&callback=initMap">
+    </script>
+    <script src="maps.js"></script>
 
 </body>
 

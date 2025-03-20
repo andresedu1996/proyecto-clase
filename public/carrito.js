@@ -9,12 +9,12 @@ function mostrarCarrito() {
     let contenedor = document.getElementById("carrito");
     let total = 0;
 
-    
-    
     contenedor.innerHTML = "";
     
     if (carrito.length === 0) {
         contenedor.innerHTML = "<p class='text-center'>Tu carrito está vacío.</p>";
+        document.getElementById("total").innerText = "0.00";
+        document.getElementById("totalConEnvio").innerText = "0.00";
         return;
     }
     
@@ -44,6 +44,8 @@ function mostrarCarrito() {
     });
 
     document.getElementById("total").innerText = total.toFixed(2);
+
+    actualizarCostoEnvio(); // Llamamos a la función para actualizar el total con envío
 
     // Agregar eventos a botones
     document.querySelectorAll(".disminuir").forEach(boton => {
