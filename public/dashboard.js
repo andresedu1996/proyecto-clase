@@ -1,23 +1,21 @@
-async function checkAuth() {
-    const token = localStorage.getItem("token");
-    if (!token) {
-        alert("Debes iniciar sesión");
-        window.location.href = "login.html";
-        return;
-    }
+// dashboard.js
+document.addEventListener("DOMContentLoaded", function () {
+    const token = localStorage.getItem('token');
+    
+    if (token) {
+        const decoded = JSON.parse(atob(token.split('.')[1])); // Decodificar el JWT
+        const userRole = decoded.role;
 
-    const response = await fetch("http://localhost/api/verify.php", {
-        headers: { "Authorization": "Bearer " + token }
-    });
-
-    const data = await response.json();
-    if (!response.ok) {
-        alert("Sesión inválida. Inicia sesión nuevamente.");
-        localStorage.removeItem("token");
-        window.location.href = "login.html";
+        // Verificar si el usuario es admin
+        if (userRole !== 'admin') {
+            // Si no es admin, redirigir al inicio
+            window.location.href = "index.html";
+        } else {
+            // Si es admin, mostrar el contenido del dashboard
+            document.getElementById("adminContent").style.display = "block";
+        }
     } else {
-        document.getElementById("userRole").innerText = "Rol: " + data.role;
+        // Si no hay token, redirigir al login
+        window.location.href = "login.html";
     }
-}
-
-checkAuth();
+});

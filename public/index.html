@@ -12,26 +12,16 @@
 <body>
 
     <script>
-       document.addEventListener("DOMContentLoaded", function () {
-    fetch("session.php")
-        .then(response => response.json())
-        .then(data => {
-            if (data.loggedin) {
-                // Ocultar botones de login y registro
-                document.querySelector(".nav-link[href='login.html']").style.display = "none";
-                document.querySelector(".nav-link[href='register.html']").style.display = "none";
 
-                // Ocultar opciones de administrador si no es admin
-                if (data.rol !== "admin") {
-                    document.querySelector(".nav-link[href='crear_tienda.html']").style.display = "none";
-                    document.querySelector(".nav-link[href='agregar_producto.html']").style.display = "none";
-                }
-
-                // Mostrar botón de logout
-                document.getElementById("logoutBtn").style.display = "inline-block";
-            }
-        });
-});
+        
+        // Función para cerrar sesión
+        function logout() {
+            // Eliminar el token o cualquier dato de sesión del almacenamiento local o sessionStorage
+            localStorage.removeItem('token'); // O sessionStorage.removeItem('token') si lo guardas en sessionStorage
+            
+            // Redirigir al login después de cerrar sesión
+            window.location.href = '/login.html'; // Redirigir al login o página principal
+        }
         </script>
 
 
@@ -60,10 +50,17 @@
                     </li>
 
                     <li class="nav-item">
-                        <a class="nav-link" href="logout.php">Cerrar Sesión</a>
+                        <a class="nav-link" href="dashboard.html">Dashboard</a>
                     </li>
 
+                    <!-- Mostrar el enlace al Dashboard solo si el rol es admin -->
+            <li id="adminLink" style="display: none;"><a href="dashboard.html">Dashboard</a></li>
 
+                    <li class="nav-item" id="logoutBtn">
+                        <a class="nav-link" href="#" onclick="logout()">Cerrar Sesión</a>
+                    </li>
+
+                    <script src="index.js"></script>
                     <li class="nav-item">
                         <a href="carrito.html" class="btn btn-success">🛒 Ver Carrito</a>
                     </li>

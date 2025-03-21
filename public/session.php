@@ -1,13 +1,15 @@
 <?php
 session_start();
-$response = ["loggedin" => false];
 
-if (isset($_SESSION["id"])) {
-    $response["loggedin"] = true;
-    $response["nombre"] = $_SESSION["nombre"];
-    $response["rol"] = $_SESSION["rol"];
+// Suponiendo que guardas el rol del usuario en la sesión
+$response = array();
+
+if (isset($_SESSION['user_id']) && isset($_SESSION['role'])) {
+    $response['loggedin'] = true;
+    $response['rol'] = $_SESSION['role']; // Admin o usuario
+} else {
+    $response['loggedin'] = false;
 }
 
-header("Content-Type: application/json");
 echo json_encode($response);
 ?>
