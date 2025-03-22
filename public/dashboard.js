@@ -1,21 +1,23 @@
-// dashboard.js
 document.addEventListener("DOMContentLoaded", function () {
     const token = localStorage.getItem('token');
-    
-    if (token) {
-        const decoded = JSON.parse(atob(token.split('.')[1])); // Decodificar el JWT
-        const userRole = decoded.role;
 
-        // Verificar si el usuario es admin
-        if (userRole !== 'admin') {
-            // Si no es admin, redirigir al inicio
+    if (!token) {
+        window.location.href = "login.html";
+        return;
+    }
+
+    try {
+        const decoded = JSON.parse(atob(token.split('.')[1]));
+        const tipoUsuario = decoded.tipo;
+
+        if (tipoUsuario !== 'admin') {
             window.location.href = "index.html";
         } else {
-            // Si es admin, mostrar el contenido del dashboard
+            // Mostrar contenido del dashboard
             document.getElementById("adminContent").style.display = "block";
         }
-    } else {
-        // Si no hay token, redirigir al login
+    } catch (e) {
+        console.error("Token inválido", e);
         window.location.href = "login.html";
     }
 });

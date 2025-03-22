@@ -15,33 +15,34 @@ if (!isset($datos["nombre"]) || !isset($datos["direccion"])) {
     exit();
 }
 
-// Extraer los datos
+/// Extraer los datos del formulario
 $nombre = $datos["nombre"];
 $direccion = $datos["direccion"];
 $descripcion = isset($datos["descripcion"]) ? $datos["descripcion"] : "";
 
-// Registrar los datos antes de la inserción para verificar que se están extrayendo correctamente
-error_log("Datos extraídos: Nombre = $nombre, Dirección = $direccion, Descripción = $descripcion");
+// Obtener el ID del admin desde la sesión
+$admin_id = $_SESSION['admin_id'];  // Esto debe ser el ID del admin autenticado
 
-// Preparar la consulta SQL
-$sql = "INSERT INTO tiendas (nombre, direccion, descripcion) VALUES (?, ?, ?)";
+// Preparar la consulta SQL, ahora incluyendo el campo admin_id
+$sql = "INSERT INTO tiendas (nombre, direccion, descripcion, admin_id) VALUES (?, ?, ?, ?)";
 
-// Registrar la consulta SQL para verificar su formato
-error_log("Consulta SQL: " . $sql);
-
+// Usar prepared statements con PDO
 try {
-    // Usar prepared statements con PDO
     $stmt = $conn->prepare($sql);
-    $stmt->execute([$nombre, $direccion, $descripcion]);
-
-    // Registrar que la tienda fue insertada correctamente
-    error_log("Tienda insertada con éxito");
+    $stmt->execute([$nombre, $direccion, $descripcion, $admin_id]);
 
     echo json_encode(["exito" => true, "mensaje" => "Tienda registrada con éxito"]);
 } catch (PDOException $e) {
-    // Registrar el error en caso de que falle la inserción
-    error_log("Error al registrar la tienda: " . $e->getMessage());
-
     echo json_encode(["exito" => false, "mensaje" => "Error al registrar la tienda: " . $e->getMessage()]);
 }
+
+session_start();
+if (!isset($_SESSION['admin_id'])) {
+    // Si no está autenticado, redirigir o devolver un error
+    echo json_encode(["exito" => false, "mensaje" => "Debes estar autenticado para registrar una tienda."]);
+    exit();
+}
+
+// Obtener el ID del administrador desde la sesión
+$admin_id = $_SESSION['admin_id'];
 ?>

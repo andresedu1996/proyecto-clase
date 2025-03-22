@@ -1,27 +1,86 @@
-<!-- dashboard.html -->
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard Admin</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="main.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+
+    <!-- AG Grid CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/ag-grid-community/styles/ag-grid.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/ag-grid-community/styles/ag-theme-alpine.css">
 </head>
 <body>
-    <h1>Bienvenido al Dashboard de Administración</h1>
-    <nav>
-        <ul>
-            <li><a href="crear_tienda.html">Crear Tienda</a></li>
-            <li><a href="agregar_producto.html">Agregar Producto</a></li>
-            <li><a href="logout.html" id="logoutBtn">Cerrar Sesión</a></li>
-        </ul>
+    <!-- Navbar oscura -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm">
+        <div class="container-fluid">
+            <a class="navbar-brand d-flex align-items-center text-white" href="#">
+                <img src="Logo.png" alt="ShopZone" width="60" height="60" class="me-2">
+                <span class="fw-bold">Dashboard de Administración</span>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false"
+                aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link text-white" href="crear_tienda.html">Crear Tienda</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-white" href="agregar_producto.html">Agregar Producto</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-danger fw-bold" href="logout.html" id="logoutBtn">Cerrar Sesión</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
     </nav>
 
-    <div id="adminContent">
-        <h2>Opciones de Administración</h2>
-        <p>Aquí puedes crear nuevas tiendas, productos, etc.</p>
+    <!-- Contenido del dashboard -->
+    <div id="adminContent" class="container mt-5">
+        <h2 class="mb-3">Opciones de Administración</h2>
+        <p class="lead">Aquí puedes crear nuevas tiendas, productos y gestionar tu plataforma.</p>
+
+        <!-- AG Grid -->
+        <div id="myGrid" class="ag-theme-alpine" style="height: 400px; width: 100%;"></div>
     </div>
 
-    <script src="dashboard.js"></script>
+    <!-- AG Grid JS (Versión correcta) -->
+    <script src="https://cdn.jsdelivr.net/npm/ag-grid-community/dist/ag-grid.noStyle.js"></script>
+
+    <!-- Inicializar AG Grid -->
+    <script>
+        // Columnas de la tabla
+        const columnDefs = [
+            { headerName: "ID Tienda", field: "idTienda", sortable: true, filter: true },
+            { headerName: "Nombre Tienda", field: "nombreTienda", sortable: true, filter: true },
+            { headerName: "Número de Órdenes", field: "ordenes", sortable: true, filter: true },
+            { headerName: "Productos en Existencia", field: "productos", sortable: true, filter: true }
+        ];
+
+        // Datos de ejemplo
+        const rowData = [
+            { idTienda: 1, nombreTienda: "Tienda A", ordenes: 45, productos: 150 },
+            { idTienda: 2, nombreTienda: "Tienda B", ordenes: 32, productos: 120 },
+            { idTienda: 3, nombreTienda: "Tienda C", ordenes: 60, productos: 200 }
+        ];
+
+        // Opciones del grid
+        const gridOptions = {
+            columnDefs: columnDefs,
+            rowData: rowData
+        };
+
+        // Inicializar AG Grid correctamente
+        document.addEventListener('DOMContentLoaded', function () {
+            const gridDiv = document.querySelector('#myGrid');
+            const { Grid } = agGrid;
+            new Grid(gridDiv, gridOptions);
+        });
+    </script>
 </body>
 </html>

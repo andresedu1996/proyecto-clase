@@ -67,7 +67,7 @@ function calcularRuta() {
 }
 */
 document.addEventListener("DOMContentLoaded", function () {
-    let map = L.map('map').setView([15.530261, -88.032025], 12);
+    let map = L.map('map').setView([15.530261, -88.032025], 13);
     let rutaLayer = L.layerGroup().addTo(map);
 
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
