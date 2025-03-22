@@ -20,94 +20,137 @@
         </div>
     </nav>
 
+    <!-- Contenido principal -->
     <main class="container mt-4">
-        <h2 id="titulo-tienda"></h2>
-        <div class="row" id="productos"></div>
+        <h2 id="tiendaNombre"></h2> <!-- Mostrar el nombre de la tienda aquí -->
+        <div class="row" id="productos"></div> <!-- Los productos de la tienda se mostrarán aquí -->
     </main>
 
-    <script src="main.js"></script>
+    <footer class="bg-dark text-white text-center p-3 mt-4">
+        <p>&copy; 2025 ShopZone</p>
+    </footer>
+
     <script>
-        // Fetch para cargar los productos
-        fetch("productos.php")
-    .then(response => response.json())
-    .then(data => {
-        let contenedor = document.getElementById("productos");
-        data.forEach(producto => {
-            let div = document.createElement("div");
-            div.classList.add("col-md-4");
+        // Extraer el nombre de la tienda desde la URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const tiendaNombre = urlParams.get('tienda');
 
-            // Crear la estructura del card
-            let card = document.createElement("div");
-            card.classList.add("card");
+        // Mostrar el nombre de la tienda en la página
+        document.getElementById('tiendaNombre').textContent = tiendaNombre;
 
-            let img = document.createElement("img");
-            img.src = producto.imagen;
-            img.classList.add("card-img-top");
-            img.alt = producto.nombre;
+        // Fetch para cargar los productos de la tienda
+        fetch(`productos?tienda=${tiendaNombre}`)
+            .then(response => response.json())
+            .then(data => {
+                if (!Array.isArray(data)) {
+                    throw new Error("La respuesta no es un array de productos.");
+                }
 
-            let cardBody = document.createElement("div");
-            cardBody.classList.add("card-body");
+                let contenedor = document.getElementById("productos");
+                data.forEach(producto => {
+                    let div = document.createElement("div");
+                    div.classList.add("col-md-4");
 
-            let title = document.createElement("h5");
-            title.classList.add("card-title");
-            title.innerText = producto.nombre;
+                    // Crear la estructura del card
+                    let card = document.createElement("div");
+                    card.classList.add("card");
 
-            let description = document.createElement("p");
-            description.classList.add("card-text");
-            description.innerText = producto.descripcion;
+                    let img = document.createElement("img");
+                    img.src = producto.imagen;
+                    img.classList.add("card-img-top");
+                    img.alt = producto.nombre;
 
-            let price = document.createElement("p");
-            price.classList.add("text-success");
-            price.innerText = `$${producto.precio}`;
+                    let cardBody = document.createElement("div");
+                    cardBody.classList.add("card-body");
 
-            let unidades = document.createElement("p");
-            unidades.innerText = `Unidades: ${producto.unidades}`;
+                    let title = document.createElement("h5");
+                    title.classList.add("card-title");
+                    title.innerText = producto.nombre;
 
-            // Crear el botón de agregar al carrito
-            let button = document.createElement("button");
-            button.classList.add("btn", "btn-primary", "agregar-carrito");
-            button.setAttribute("data-id", producto.ID);
-            button.setAttribute("data-nombre", producto.nombre);
-            button.setAttribute("data-precio", producto.precio);
-            button.setAttribute("data-imagen", producto.imagen);
-            button.innerText = "Agregar al Carrito";
+                    let description = document.createElement("p");
+                    description.classList.add("card-text");
+                    description.innerText = producto.descripcion;
 
-            // Agregar todos los elementos a la estructura del card
-            cardBody.appendChild(title);
-            cardBody.appendChild(description);
-            cardBody.appendChild(price);
-            cardBody.appendChild(unidades);
-            cardBody.appendChild(button);
-            card.appendChild(img);
-            card.appendChild(cardBody);
+                    let price = document.createElement("p");
+                    price.classList.add("text-success");
+                    price.innerText = `$${producto.precio}`;
 
-            // Agregar el card al contenedor
-            div.appendChild(card);
-            contenedor.appendChild(div);
-        });
+                    let unidades = document.createElement("p");
+                    unidades.innerText = `Unidades: ${producto.unidades}`;
 
-        // Agregar los event listeners a los botones
-        const botonesCarrito = document.querySelectorAll('.agregar-carrito');
-        botonesCarrito.forEach(boton => {
-            boton.addEventListener('click', function () {
-                const productoId = this.getAttribute('data-id');
-                const productoNombre = this.getAttribute('data-nombre');
-                const productoPrecio = this.getAttribute('data-precio');
-                const productoImagen = this.getAttribute('data-imagen');
-                alert(`Producto agregado al carrito: ${productoNombre}`);
-                console.log('ID:', productoId, 'Nombre:', productoNombre, 'Precio:', productoPrecio);
+                    // Crear el botón de agregar al carrito
+                    let button = document.createElement("button");
+                    button.classList.add("btn", "btn-primary", "agregar-carrito");
+                    button.setAttribute("data-id", producto.ID);
+                    button.setAttribute("data-nombre", producto.nombre);
+                    button.setAttribute("data-precio", producto.precio);
+                    button.setAttribute("data-imagen", producto.imagen);
+                    button.innerText = "Agregar al Carrito";
+
+                    // Agregar todos los elementos al card
+                    cardBody.appendChild(title);
+                    cardBody.appendChild(description);
+                    cardBody.appendChild(price);
+                    cardBody.appendChild(unidades);
+                    cardBody.appendChild(button);
+                    card.appendChild(img);
+                    card.appendChild(cardBody);
+
+                    // Agregar card al contenedor
+                    div.appendChild(card);
+                    contenedor.appendChild(div);
+                });
+
+                // Agregar funcionalidad a los botones
+                const botonesCarrito = document.querySelectorAll('.agregar-carrito');
+                botonesCarrito.forEach(boton => {
+                    boton.addEventListener('click', function () {
+                        const productoId = this.getAttribute('data-id');
+                        const productoNombre = this.getAttribute('data-nombre');
+                        const productoPrecio = parseFloat(this.getAttribute('data-precio'));
+                        const productoImagen = this.getAttribute('data-imagen');
+
+                        // Obtener el carrito actual del localStorage
+                        let carrito = JSON.parse(localStorage.getItem('carrito')) || [];
+
+                        // Verificar si ya existe en el carrito
+                        const index = carrito.findIndex(item => item.id === productoId);
+                        if (index !== -1) {
+                            carrito[index].cantidad += 1;
+                        } else {
+                            carrito.push({
+                                id: productoId,
+                                nombre: productoNombre,
+                                precio: productoPrecio,
+                                imagen: productoImagen,
+                                cantidad: 1
+                            });
+                        }
+
+                        // Guardar de nuevo en localStorage
+                        localStorage.setItem('carrito', JSON.stringify(carrito));
+
+                        // Alerta de éxito
+                        Swal.fire({
+                            title: 'Producto agregado al carrito',
+                            text: `${productoNombre} - $${productoPrecio}`,
+                            imageUrl: productoImagen,
+                            imageWidth: 100,
+                            imageHeight: 100,
+                            imageAlt: productoNombre,
+                            confirmButtonText: 'Cerrar'
+                        });
+
+                        console.log('Producto agregado al carrito:', productoNombre);
+                    });
+                });
+            })
+            .catch(error => {
+                console.error("Error al cargar productos:", error);
             });
-        });
-    })
-    .catch(error => {
-        console.error("Error al cargar productos:", error);
-    });
     </script>
 
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
-
-<footer class="bg-dark text-white text-center p-3 mt-4">
-    <p>&copy; 2025 ShopZone</p>
-</footer>
 
 </html>

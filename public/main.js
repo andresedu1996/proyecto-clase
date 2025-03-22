@@ -92,3 +92,52 @@ function agregarEventosCarrito() {
         });
     });
 }
+
+
+fetch("http://localhost:3000/tiendas")
+  .then((res) => res.json())
+  .then((data) => {
+    console.log("Tiendas:", data);
+    // aquí generas el HTML de las tarjetas con la info
+  })
+  .catch((err) => console.error("Error:", err));
+
+// Si no estamos viendo una tienda específica, cargar todas
+if (!tiendaNombre) {
+    fetch("/tiendas")
+        .then(response => {
+            if (!response.ok) {
+                throw new Error("No se pudieron obtener las tiendas.");
+            }
+            return response.json();
+        })
+        .then(tiendas => {
+            const tiendasContainer = document.getElementById("tiendas");
+            tiendasContainer.innerHTML = "";
+
+            if (tiendas.length === 0) {
+                tiendasContainer.innerHTML = "<p>No hay tiendas disponibles.</p>";
+                return;
+            }
+
+            tiendas.forEach(tienda => {
+                const col = document.createElement("div");
+                col.className = "col-md-3";
+                col.innerHTML = `
+                    <div class="card mb-3">
+                        <img src="${tienda.imagen}" class="card-img-top" alt="${tienda.nombre}">
+                        <div class="card-body">
+                            <h5 class="card-title">${tienda.nombre}</h5>
+                            <p class="card-text">${tienda.descripcion || ''}</p>
+                            <a href="index.html?nombre=${encodeURIComponent(tienda.nombre)}" class="btn btn-primary">Ver productos</a>
+                        </div>
+                    </div>
+                `;
+                tiendasContainer.appendChild(col);
+            });
+        })
+        .catch(error => {
+            console.error("Error al cargar tiendas:", error);
+            document.getElementById("tiendas").innerHTML = "<p>Error al cargar tiendas.</p>";
+        });
+}

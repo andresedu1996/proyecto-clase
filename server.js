@@ -51,22 +51,57 @@ app.post('/guardar_tienda', (req, res) => {
     });
 });
 
+// Ruta GET /tiendas
+app.get('/tiendas', (req, res) => {
+    const sql = 'SELECT * FROM tiendas';
+  
+    db.query(sql, (err, results) => {
+      if (err) {
+        console.error('❌ Error en la consulta:', err);
+        res.status(500).json({ error: 'Error al obtener las tiendas' });
+        return;
+      }
+      res.json(results);
+    });
+  });
+
 // Ruta para obtener productos desde la base de datos según la tienda
 app.get("/productos", (req, res) => {
-    const tienda = req.query.nombre; // Obtener el nombre de la tienda desde la URL
+    const tienda = req.query.tienda; // Obtener el nombre de la tienda desde la URL
 
     if (!tienda) {
         return res.status(400).json({ error: "Falta el nombre de la tienda en la consulta" });
     }
 
-    const query = `SELECT ID, nombre, descripcion, precio, unidades, imagen FROM productos WHERE tienda = ?`;
-
-    db.query(query, [tienda], (err, results) => {
+    // Primero buscar el tienda_id
+    const tiendaQuery = `SELECT ID FROM tiendas WHERE nombre = ?`;
+    db.query(tiendaQuery, [tienda], (err, tiendaResult) => {
         if (err) {
-            console.error("Error al obtener productos:", err);
-            return res.status(500).json({ error: "Error en el servidor" });
+            console.error("Error al obtener tienda:", err);
+            return res.status(500).json({ error: "Error al obtener la tienda" });
         }
-        res.json(results);
+
+        if (tiendaResult.length === 0) {
+            return res.status(404).json({ error: "Tienda no encontrada" });
+        }
+
+        const tienda_id = tiendaResult[0].ID;
+
+        // Luego, buscar los productos por tienda_id
+        const query = `SELECT ID, nombre, descripcion, precio, unidades, imagen FROM productos WHERE tienda_id = ?`;
+        db.query(query, [tienda_id], (err, results) => {
+            if (err) {
+                console.error("Error al obtener productos:", err);
+                return res.status(500).json({ error: "Error en el servidor" });
+            }
+
+            // Verificar si la respuesta es un array
+            if (!Array.isArray(results)) {
+                return res.status(500).json({ error: "La respuesta no es un array de productos" });
+            }
+
+            res.json(results);
+        });
     });
 });
 

@@ -76,42 +76,45 @@
     <!-- Contenido principal -->
     <main class="container mt-4">
         <section class="mb-3">
-            <h2>¿Qué vas a pedir hoy?</h2>
-            <div class="row" id="tiendas">
-                <div class="col-md-4">
-                    <div class="card text-center p-3">
-                        <a href="tienda.html?nombre=tienda1">
-                            <img src="img/tienda1.png" class="card-img-top" alt="Tienda 1">
-                            <h5 class="mt-2">Tienda 1</h5>
-                        </a>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="card text-center p-3">
-                        <a href="tienda.html?nombre=tienda2">
-                            <img src="img/tienda2.png" class="card-img-top" alt="Tienda 2">
-                            <h5 class="mt-2">Tienda 2</h5>
-                        </a>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="card text-center p-3">
-                        <a href="tienda.html?nombre=tienda3">
-                            <img src="img/tienda3.png" class="card-img-top" alt="Tienda 3">
-                            <h5 class="mt-2">Tienda 3</h5>
-                        </a>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="card text-center p-3">
-                        <a href="tienda.html?nombre=Test">
-                            <img src="img/tienda3.png" class="card-img-top" alt="Test">
-                            <h5 class="mt-2">Test</h5>
-                        </a>
-                    </div>
-                </div>
+            <h2>Escoge la tienda de donde quieras comprar</h2>
+            <div class="row" id="tiendas"></div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+    const contenedor = document.getElementById("tiendas");
+    if (contenedor) {
+        fetch("/tiendas")
+            .then(response => response.json())
+            .then(tiendas => {
+                console.log(tiendas);  // Verificar los datos que recibes
+                tiendas.forEach(tienda => {
+                    const col = document.createElement('div');
+                    col.className = 'col-md-4 mb-4'; // para espacio entre las tiendas
+
+                    col.innerHTML = `
+                        <div class="card text-center p-3">
+                            <a href="tienda.html?tienda=${encodeURIComponent(tienda.nombre)}">
+                                <img src="${tienda.imagen}" class="card-img-top" alt="${tienda.nombre}">
+                                <h5 class="mt-2">${tienda.nombre}</h5>
+                            </a>
+                        </div>
+                    `;
+
+                    contenedor.appendChild(col);
+                });
+            })
+            .catch(error => {
+                console.error("Error al obtener las tiendas:", error);
+            });
+    } else {
+        console.error("Contenedor de tiendas no encontrado.");
+    }
+});
+</script>
 
             </div>
+
+          
         </section>
 
         <!-- Sección de sugerencias -->
