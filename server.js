@@ -105,6 +105,31 @@ app.get("/productos", (req, res) => {
     });
 });
 
+app.post("/agregar_producto", (req, res) => {
+    const { tienda_id, nombre, descripcion, precio, unidades, imagen } = req.body;
+
+    // Verificar que todos los campos necesarios estén presentes
+    if (!tienda_id || !nombre || !precio || !unidades || !imagen) {
+        return res.status(400).json({ error: "Faltan datos requeridos" });
+    }
+
+    // Subir imagen si es proporcionada
+    let imagenPath = imagen || '';
+
+    // Inserción del producto en la base de datos
+    const query = `INSERT INTO productos (tienda_id, nombre, descripcion, precio, unidades, imagen) 
+                   VALUES (?, ?, ?, ?, ?, ?)`;
+
+    db.query(query, [tienda_id, nombre, descripcion, precio, unidades, imagenPath], (err, result) => {
+        if (err) {
+            console.error("Error al agregar producto:", err);  // Ver detalles del error en la consola
+            return res.status(500).json({ error: "Error al agregar producto", details: err.message });
+        }
+
+        // Respuesta al cliente indicando que el producto se agregó correctamente
+        res.status(200).json({ message: "Producto agregado correctamente" });
+    });
+});
 // Ruta para registrar usuarios con pool de conexiones
 app.post("/register", async (req, res) => {
     const { nombre, email, password, tipo } = req.body;
@@ -196,7 +221,7 @@ app.post('/pagar', async (req, res) => {
 
 // Ruta para crear la sesión de pago con Stripe
 app.post('/create-checkout-session', async (req, res) => {
-    const { carrito, direccion } = req.body;
+    const { carrito, direccion, costoEnvio } = req.body;
 
     if (!carrito || !Array.isArray(carrito) || carrito.length === 0) {
         return res.status(400).json({ error: "Carrito inválido" });
@@ -206,7 +231,6 @@ app.post('/create-checkout-session', async (req, res) => {
     let total = carrito.reduce((sum, producto) => sum + (producto.precio * 100 * producto.cantidad), 0);
 
     // Agregar costo de envío
-    const costoEnvio = calcularEnvio(direccion);
     if (costoEnvio > 0) {
         total += costoEnvio * 100;
     }
@@ -294,6 +318,8 @@ app.get('/cancel', (req, res) => {
         </html>
     `);
 });
+
+
 
 // Iniciar el servidor (debe llamarse solo una vez)
 app.listen(port, () => {

@@ -54,6 +54,11 @@
 
         const data = await response.json();
         alert(data.message || data.error);
+
+                // Redirigir si el registro fue exitoso
+                if (response.ok && data.message) {
+            window.location.href = "login.html";
+        }
     });
 </script>
 </body>

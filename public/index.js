@@ -14,3 +14,19 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     }
 });
+
+document.addEventListener("DOMContentLoaded", () => {
+    const token = localStorage.getItem('token');
+    if (token) {
+        try {
+            const decoded = JSON.parse(atob(token.split('.')[1]));
+            const tipoUsuario = decoded.tipo;
+
+            if (tipoUsuario === 'admin') {
+                document.getElementById("adminLink").style.display = "block"; // Mostrar el enlace al dashboard
+            }
+        } catch (e) {
+            console.error("Token inválido", e);
+        }
+    }
+});

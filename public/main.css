@@ -5,16 +5,31 @@ body {
 
 h2 {
     color: #343a40;
+    margin-bottom: 20px;
 }
 
 .card {
     text-align: center;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+}
+
+.card-body {
+    padding: 15px;
 }
 
 .card button {
-    margin-top: 10px;
+    margin-top: 15px;
+    width: 100%;
 }
 
+.card-img-top {
+    width: 100%;  /* Hace que la imagen ocupe el ancho completo de la tarjeta */
+    height: 200px;  /* Fija la altura de la imagen */
+    object-fit: contain;  /* Asegura que la imagen cubra completamente el área de la tarjeta, recortando si es necesario */
+    object-position: center;  /* Centra la imagen dentro de la tarjeta */
+}
 footer {
     margin-top: 20px;
     background-color: #272500;
@@ -33,70 +48,86 @@ footer {
     color: #ffd6a5 !important;
 }
 
-#register-form {
-    width: 100%;
-    max-width: 400px;
-    margin: 50px auto;
-    padding: 20px;
-    background-color: white;
-    border-radius: 10px;
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-    text-align: center;
-}
-
-#register-form label {
-    display: block;
-    margin-top: 10px;
-    font-weight: bold;
-    color: #343a40;
-    text-align: left;
-}
-
-#register-form input,
-#register-form select {
-    width: 100%;
-    padding: 10px;
-    margin-top: 5px;
-    border: 1px solid #ced4da;
-    border-radius: 5px;
-    font-size: 16px;
-}
-
-#register-form button {
-    width: 100%;
-    background-color: #f89234;
-    color: white;
-    border: none;
-    padding: 10px;
-    margin-top: 15px;
-    font-size: 18px;
-    font-weight: bold;
-    cursor: pointer;
-    border-radius: 5px;
-    transition: background 0.3s;
-}
-
-#register-form button:hover {
-    background-color: #d3782b;
-}
-
-#register-form select {
-    cursor: pointer;
-}
-
-.producto {
-    border: 1px solid #ccc;
-    padding: 15px;
-    margin: 10px;
-    background-color: white;
-    display: block !important;
-}
-
-.producto button {
-    display: block !important;
-    visibility: visible !important;
-    opacity: 1 !important;
-}
 #productos {
-    display: block !important;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+}
+
+.col-md-4 {
+    margin-bottom: 20px;
+}
+
+.img-tienda {
+    width: 100%;
+    height: 200px;
+    object-fit: contain;
+    object-position: center;
+    border-radius: 10px;
+}
+
+/* Agregar algunos estilos adicionales para mejor presentación en dispositivos pequeños */
+@media (max-width: 768px) {
+    .col-md-4 {
+        width: 100%;
+        margin-bottom: 15px;
+    }
+}
+
+@media (min-width: 769px) {
+    .col-md-4 {
+        width: 30%;
+    }
+}
+/* Mantener los estilos de AG Grid pero ajustar la apariencia */
+.ag-theme-alpine .ag-header-cell {
+    background-color: #161616; /* Cambiar color de fondo de las cabeceras */
+    font-weight: bold;
+    font-size: 14px; /* Cambiar tamaño de fuente en las cabeceras */
+    color: white; /* Cambiar color de texto en las cabeceras */
+    text-align: center; /* Centrar texto en las cabeceras */
+}
+.ag-theme-alpine .ag-row {
+    background-color: #ffffff; /* Cambiar fondo de las filas */
+}
+.ag-theme-alpine .ag-row-even {
+    background-color: #f9f9f9; /* Cambiar color de las filas pares */
+}
+.ag-theme-alpine .ag-cell {
+    font-size: 14px; /* Cambiar tamaño de fuente en las celdas */
+}
+/* Estilo al pasar el mouse sobre las filas */
+.ag-row-hover {
+    background-color: #f8f9fa; /* Color claro para resaltar */
+}
+
+/* Estilo para las filas alternadas */
+.ag-row:nth-child(even) {
+    background-color: #f8f9fa; /* Color alternado en las filas */
+}
+
+/* Estilo al pasar el mouse sobre las celdas */
+.ag-cell-focus {
+    border: 2px solid #007bff; /* Borde azul al seleccionar celda */
+}
+
+/* Estilo de las filas al pasar el mouse */
+.ag-row-hover .ag-cell {
+    background-color: #e9ecef; /* Color claro al pasar el mouse sobre la celda */
+}
+
+/* Estilo para las celdas con números */
+.ag-cell-number {
+    text-align: right; /* Alinear los números a la derecha */
+}
+
+/* Ajustar la altura de las filas en el grid */
+.ag-row {
+    height: 60px !important; /* Aumentar la altura de las filas */
+}
+/* Estilo para las celdas de la tabla */
+.ag-cell {
+    padding: 5px; /* Reduce el espaciado interno */
+    font-size: 14px; /* Tamaño de fuente */
+    text-align: center; /* Centrado de texto */
 }

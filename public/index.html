@@ -49,10 +49,9 @@
                         <a class="nav-link" href="agregar_producto.html">Agregar Productos</a>
                     </li>
 
-                    <li class="nav-item">
+                    <li class="nav-item" id="adminLink" style="display: none;">
                         <a class="nav-link" href="dashboard.html">Dashboard</a>
                     </li>
-
                     <!-- Mostrar el enlace al Dashboard solo si el rol es admin -->
             <li id="adminLink" style="display: none;"><a href="dashboard.html">Dashboard</a></li>
 
@@ -94,7 +93,7 @@
                     col.innerHTML = `
                         <div class="card text-center p-3">
                             <a href="tienda.html?tienda=${encodeURIComponent(tienda.nombre)}">
-                                <img src="${tienda.imagen}" class="card-img-top" alt="${tienda.nombre}">
+                                <img src="${tienda.imagen}" class="card-img-top img-tienda" alt="${tienda.nombre}">
                                 <h5 class="mt-2">${tienda.nombre}</h5>
                             </a>
                         </div>
@@ -117,71 +116,7 @@
           
         </section>
 
-        <!-- Sección de sugerencias -->
-        <section class="mb-3">
-            <h2>Te sugerimos</h2>
-            <div class="row">
-                <div class="col-md-3">
-                    <div class="card">
-                        <img src="img/sugerencia1.png" class="card-img-top" alt="Sugerencia 1">
-                        <div class="card-body">
-                            <div id="productos">
-                                <div class="producto">
-                                    <img src="ejemplo.jpg" class="producto-img" alt="Ejemplo">
-                                    <h5 class="producto-nombre">Producto de prueba</h5>
-                                    <p class="producto-descripcion">Descripción de prueba</p>
-                                    <p class="producto-precio text-success">$10.00</p>
-                                    <p>Unidades: 5</p>
-                                    <button class="btn btn-primary agregar-carrito" 
-                                        data-id="1" 
-                                        data-nombre="Ejemplo" 
-                                        data-precio="10" 
-                                        data-imagen="ejemplo.jpg">
-                                        Agregar al Carrito
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="card">
-                        <img src="img/sugerencia2.png" class="card-img-top" alt="Sugerencia 2">
-                        <div class="card-body">
-                            <h5 class="card-title">Pollo Supremo</h5>
-                            <p class="card-text">Envío L.32</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="card">
-                        <img src="img/sugerencia3.png" class="card-img-top" alt="Sugerencia 3">
-                        <div class="card-body">
-                            <h5 class="card-title">Popeyes</h5>
-                            <p class="card-text">Envío L.18</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="card">
-                        <img src="img/sugerencia4.png" class="card-img-top" alt="Sugerencia 4">
-                        <div class="card-body">
-                            <h5 class="card-title">Baleadas Kennedy</h5>
-                            <p class="card-text">Envío L.18</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Sección de productos -->
-        <section>
-            <h2>Productos disponibles</h2>
-            <div class="row" id="productos">
-                <!-- Los productos se mostrarán aquí -->
-            </div>
-        </section>
-    </main>
+       
 
     <footer class="bg-dark text-white text-center p-3 mt-4">
         <p>&copy; 2025 ShopZone</p>

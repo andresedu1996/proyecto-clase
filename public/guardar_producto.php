@@ -1,43 +1,35 @@
 <?php
 header("Content-Type: application/json");
 
-// Conectar a la base de datos
-$conexion = new mysqli("localhost", "root", "", "mi_base_datos");
+// Conexión a la base de datos
+$conexion = new mysqli("localhost", "root", "", "shopzone");
 
 if ($conexion->connect_error) {
-    die(json_encode(["exito" => false, "mensaje" => "Error de conexión: " . $conexion->connect_error]));
+    die(json_encode(["error" => "Error de conexión: " . $conexion->connect_error]));
 }
 
-// Recibir los datos del producto
-$datos = json_decode(file_get_contents("php://input"), true);
+// Obtener los datos del producto enviados en el cuerpo de la solicitud
+$data = json_decode(file_get_contents("php://input"), true);
 
-if (!isset($datos["tienda_id"]) || !isset($datos["nombre"]) || !isset($datos["precio"]) || !isset($datos["descripcion"]) || !isset($datos["unidades"])) {
-    echo json_encode(["exito" => false, "mensaje" => "Datos incompletos"]);
-    exit();
+if (!$data) {
+    die(json_encode(["error" => "No se recibieron datos válidos"]));
 }
 
-// Recoger los datos
-$tienda_id = (int) $datos["tienda_id"];
-$nombre = $conexion->real_escape_string($datos["nombre"]);
-$descripcion = $conexion->real_escape_string($datos["descripcion"]);
-$precio = (float) $datos["precio"];
-$unidades = (int) $datos["unidades"];
-$imagen = isset($datos["imagen"]) ? $conexion->real_escape_string($datos["imagen"]) : '';
+$tienda_id = $data['tienda_id'];
+$nombre = $data['nombre'];
+$descripcion = $data['descripcion'];
+$precio = $data['precio'];
+$unidades = $data['unidades'];
+$imagen = $data['imagen'];
 
-// Si se subió una imagen
-if ($_FILES["imagen"]["name"]) {
-    $nombre_imagen = $_FILES["imagen"]["name"];
-    $ruta_imagen = "uploads/" . $nombre_imagen;
-    move_uploaded_file($_FILES["imagen"]["tmp_name"], $ruta_imagen);
-    $imagen = $ruta_imagen;
-}
-
-$sql = "INSERT INTO productos (tienda_id, nombre, descripcion, precio, unidades, imagen) VALUES ('$tienda_id', '$nombre', '$descripcion', '$precio', '$unidades', '$imagen')";
+// Insertar el producto en la base de datos
+$sql = "INSERT INTO productos (tienda_id, nombre, descripcion, precio, unidades, imagen)
+        VALUES ('$tienda_id', '$nombre', '$descripcion', '$precio', '$unidades', '$imagen')";
 
 if ($conexion->query($sql) === TRUE) {
-    echo json_encode(["exito" => true, "mensaje" => "Producto agregado con éxito"]);
+    echo json_encode(["mensaje" => "Producto agregado con éxito"]);
 } else {
-    echo json_encode(["exito" => false, "mensaje" => "Error: " . $conexion->error]);
+    echo json_encode(["error" => "Error al agregar producto: " . $conexion->error]);
 }
 
 $conexion->close();

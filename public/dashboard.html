@@ -12,6 +12,21 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/ag-grid-community/styles/ag-theme-alpine.css">
 </head>
 <body>
+
+    <script>
+
+        
+        // Función para cerrar sesión
+        function logout() {
+            // Eliminar el token o cualquier dato de sesión del almacenamiento local o sessionStorage
+            localStorage.removeItem('token'); // O sessionStorage.removeItem('token') si lo guardas en sessionStorage
+            
+            // Redirigir al login después de cerrar sesión
+            window.location.href = '/login.html'; // Redirigir al login o página principal
+        }
+        </script>
+
+
     <!-- Navbar oscura -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm">
         <div class="container-fluid">
@@ -27,13 +42,16 @@
             <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
                 <ul class="navbar-nav">
                     <li class="nav-item">
+                        <a class="nav-link text-white" href="index.html">Volver</a>
+                    </li>
+                    <li class="nav-item">
                         <a class="nav-link text-white" href="crear_tienda.html">Crear Tienda</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link text-white" href="agregar_producto.html">Agregar Producto</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-danger fw-bold" href="logout.html" id="logoutBtn">Cerrar Sesión</a>
+                    <li class="nav-item" id="logoutBtn">
+                        <a class="nav-link" href="#" onclick="logout()">Cerrar Sesión</a>
                     </li>
                 </ul>
             </div>
@@ -56,12 +74,11 @@
     <script>
         // Columnas de la tabla
         const columnDefs = [
-            { headerName: "ID Tienda", field: "idTienda", sortable: true, filter: true },
-            { headerName: "Nombre Tienda", field: "nombreTienda", sortable: true, filter: true },
-            { headerName: "Número de Órdenes", field: "ordenes", sortable: true, filter: true },
-            { headerName: "Productos en Existencia", field: "productos", sortable: true, filter: true }
-        ];
-
+    { headerName: "ID Tienda", field: "idTienda", sortable: true, filter: true, autoHeight: true },
+    { headerName: "Nombre Tienda", field: "nombreTienda", sortable: true, filter: true, autoHeight: true },
+    { headerName: "Número de Órdenes", field: "ordenes", sortable: true, filter: true, autoHeight: true },
+    { headerName: "Productos en Existencia", field: "productos", sortable: true, filter: true, autoHeight: true }
+];
         // Datos de ejemplo
         const rowData = [
             { idTienda: 1, nombreTienda: "Tienda A", ordenes: 45, productos: 150 },
