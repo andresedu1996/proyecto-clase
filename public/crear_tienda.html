@@ -38,6 +38,11 @@
                 <label for="descripcionTienda" class="form-label">Descripción</label>
                 <textarea class="form-control" id="descripcionTienda" rows="3"></textarea>
             </div>
+            <div class="mb-3">
+                <label for="imagenURL" class="form-label">URL de la Imagen</label>
+                <input type="text" class="form-control" id="imagenURL" placeholder="https://ejemplo.com/imagen.jpg">
+            </div>
+
             <button type="submit" class="btn btn-primary">Registrar Tienda</button>
         </form>
     </div>
@@ -86,32 +91,33 @@
 
         // Función para manejar el envío del formulario
         function registrarTienda(event) {
-    event.preventDefault();  // Prevenir el envío del formulario por defecto
+    event.preventDefault();
 
     let nombre = document.getElementById('nombreTienda').value;
     let direccion = document.getElementById('direccionTienda').value;
     let descripcion = document.getElementById('descripcionTienda').value;
+    let imagen = document.getElementById('imagenURL').value;
 
-    // Crear un objeto con los datos del formulario
     let tiendaData = {
         nombre: nombre,
         direccion: direccion,
-        descripcion: descripcion
+        descripcion: descripcion,
+        imagen: imagen
     };
 
-    // Enviar los datos al servidor usando fetch
     fetch('http://localhost:3000/guardar_tienda', {
-    method: 'POST',
-    headers: {
-        'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(tiendaData)
-})
-    .then(response => response.json())  // Esperar respuesta JSON
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(tiendaData)
+    })
+    .then(response => response.json())
     .then(data => {
-        console.log(data);  // Ver lo que devuelve el servidor
+        console.log(data);
         if (data.exito) {
             alert(data.mensaje);
+            document.getElementById('formTienda').reset(); // limpia el formulario
         } else {
             alert("Error: " + data.mensaje);
         }
@@ -120,8 +126,7 @@
         console.error("Error en la solicitud:", error);
         alert("Hubo un problema al registrar la tienda.");
     });
-
-        }
+}
 
         // Agregar el evento submit al formulario
         document.getElementById('formTienda').addEventListener('submit', registrarTienda);

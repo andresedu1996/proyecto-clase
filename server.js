@@ -33,21 +33,17 @@ function calcularEnvio(direccion) {
 }
 
 app.post('/guardar_tienda', (req, res) => {
-    const { nombre, direccion, descripcion } = req.body;
+    const { nombre, direccion, descripcion, imagen } = req.body;
 
-    // Aquí puedes guardar los datos en la base de datos o hacer lo que necesites
-    console.log('Tienda registrada:', req.body);
+    const sql = `INSERT INTO tiendas (nombre, direccion, descripcion, imagen) VALUES (?, ?, ?, ?)`;
 
-    const query = "INSERT INTO tiendas (nombre, direccion, descripcion) VALUES (?, ?, ?)";
-    
-    db.query(query, [nombre, direccion, descripcion], (err, result) => {
+    db.query(sql, [nombre, direccion, descripcion, imagen], (err, result) => {
         if (err) {
             console.error("Error al insertar tienda:", err);
-            return res.status(500).json({ error: "Error al guardar la tienda" });
+            return res.status(500).json({ mensaje: 'Error al guardar la tienda' });
         }
-        
-        console.log("Tienda guardada en la base de datos:", result);
-        res.json({ exito: true, mensaje: 'Tienda registrada correctamente' });
+
+        return res.status(200).json({ exito: true, mensaje: 'Tienda guardada exitosamente' });
     });
 });
 
