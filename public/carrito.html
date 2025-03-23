@@ -10,36 +10,44 @@
 </head>
 
 <body>
-    <nav class="navbar navbar-expand-lg bg-body-tertiary">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="index.html">
+    <nav class="navbar navbar-expand-lg">
+        <div class="container">
+            <a class="navbar-brand" href="index.html">  
                 <img src="Logo.png" alt="ShopZone" width="150" height="150"> ShopZone
             </a>
+            <li class="nav-item">
+                <a class="nav-link volver-btn" href="index.html">Volver A Menu</a>
+            </li>
         </div>
     </nav>
 
     <main class="container mt-4">
         <h2>🛒 Carrito de Compras</h2>
         <div id="carrito" class="row"></div>
-        <div class="mt-4 text-end">
-            <h4>Total: $<span id="total">0.00</span></h4>
-            <button class="btn btn-danger" id="vaciar-carrito">Vaciar Carrito</button>
-            <button class="btn btn-success" id="realizar-pedido">Realizar Pedido</button>
-        </div>
+  
 
-        <h3>Ubicación de Envío</h3>
+      
+        <h3>Envia desde nuestro centro de distribucion principal a tu direccion</h3>
+        <p>*Los productos llegan a nuetro centro de distribucion a tu direccion el costo de envio varia segun la distancia</p>
         <label for="direccion">Dirección de envío:</label>
         <input type="text" id="direccion" placeholder="Ingresa tu dirección" required>
         <button onclick="calcularRuta()" class="btn btn-primary mt-2">Calcular Ruta</button>
-        <div id="map" style="width: 100%; height: 400px; margin-top: 10px;"></div>
-        <p>Costo de Envío: $<span id="costoEnvio">0.00</span></p>
-        <h4>Total con Envío: $<span id="totalConEnvio">0.00</span></h4>
+        <div id="map" style="width: 100%; height: 500px; margin-top: 10px;"></div>
+        <p>Costo de Envío: L<span id="costoEnvio">0.00</span></p>
+        <h4>Sub-Total: L<span id="total">0.00</span></h4>
+       
+
+        <div class="mt-4 text-end">
+            <h4>Total con Envío: L<span id="totalConEnvio">0.00</span></h4>
+            <button class="btn btn-danger" id="vaciar-carrito">Vaciar Carrito</button>
+            <button class="btn btn-success" id="realizar-pedido">Realizar Pedido</button>
+        </div>
     </main>
 
     <script src="https://js.stripe.com/v3/"></script>
     <script src="carrito.js"></script>
   
-  
+    
      <!-- Leaflet y OSRM) -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>

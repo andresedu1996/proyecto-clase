@@ -1,18 +1,66 @@
 body {
-    font-family: Arial, sans-serif;
-    background-color: #f8f9fa;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    position: relative;
+    background-color: #f0f0f0; /* Color de fondo para el contenido */
+    min-height: 100vh;
 }
 
+/* Pseudo-elemento para aplicar el blur a la imagen de fondo */
+body::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: url('background.jpg');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    filter: blur(8px); /* Controla la intensidad del blur */
+    z-index: -1; /* Asegura que la imagen esté detrás del contenido */
+    animation: gradientBG 15s ease infinite;
+}
+@keyframes gradientBG {
+    0% {background-position: 0% 50%;}
+    50% {background-position: 100% 50%;}
+    100% {background-position: 0% 50%;}
+}
+.tienda-card {
+    background: linear-gradient(135deg, #c3cfe2, #cfd9df);
+    border: 1px solid rgba(255, 255, 255, 0.3); /* borde blanco translúcido */
+    border-radius: 1rem;
+    backdrop-filter: blur(15px); /* efecto borroso detrás */
+    -webkit-backdrop-filter: blur(15px); /* para Safari */
+    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.1); /* sombra suave */
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.tienda-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+}
 h2 {
-    color: #343a40;
+    color: #f0f0f0;
     margin-bottom: 20px;
 }
+
 
 .card {
-    text-align: center;
-    border-radius: 10px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    margin-bottom: 20px;
+    background: rgba(255, 255, 255, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 1rem;
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    overflow: hidden;
+}
+
+@keyframes aparecer {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 .card-body {
@@ -29,30 +77,39 @@ h2 {
     height: 200px;  /* Fija la altura de la imagen */
     object-fit: contain;  /* Asegura que la imagen cubra completamente el área de la tarjeta, recortando si es necesario */
     object-position: center;  /* Centra la imagen dentro de la tarjeta */
+    border-top-left-radius: 1rem;
+    border-top-right-radius: 1rem;
 }
 footer {
-    margin-top: 20px;
+    margin-top: auto;
     background-color: #272500;
 }
 
 .navbar-brand {
-    font-size: 50px;
-    font-weight: bold;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    font-style: italic;
+    font-size: 70px;
+    font-weight: normal;
     color: #333;
 }
 
 .navbar {
-    background: linear-gradient(to right, #f89234, #ff5722); /* Degradado de izquierda a derecha */
+    background: rgba(30, 30, 30, 0.5); /* Fondo oscuro semi-transparente */
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px); /* Para Safari */
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4); /* Sombra elegante */
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1); /* Borde sutil abajo */
     font-size: larger;
 }
 
 .navbar .navbar-brand,
 .navbar .nav-link {
-    color: white !important;
+    color: #ffffff !important;
+    text-shadow: 0 1px 3px rgba(0,0,0,0.6); /* Hace el texto más legible sobre el fondo */
 }
 
 .navbar .nav-link:hover {
-    color: #ffd6a5 !important;
+    color: #ffb347 !important; /* Un tono cálido que combine con tu estilo general */
 }
 
 #productos {
@@ -188,4 +245,46 @@ footer {
 
 #register-form button:hover {
     background-color: #084cdf;
+}
+
+#totalConEnvio {
+    font-weight: bold;
+    font-size: 1.2em;
+    color: #1a0c00; /* Puedes cambiar el color según tu diseño */
+}
+
+.total-container {
+    text-align: right;
+    margin-right: 20px;
+    font-size: 1.1em;
+}
+/* Estilización base del enlace */
+.volver-btn {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #ff5900; /* Azul del fondo */
+    color: white;
+    text-align: center;
+    text-decoration: none; /* Eliminar el subrayado */
+    font-weight: bold;
+    border-radius: 5px; /* Bordes redondeados */
+    transition: background-color 0.3s, transform 0.2s; /* Efecto de transición */
+}
+
+/* Efecto al pasar el ratón */
+.volver-btn:hover {
+    background-color: #b96639; /* Color más oscuro */
+    transform: translateY(-3px); /* Sombra de levantamiento */
+}
+
+/* Efecto al hacer clic */
+.volver-btn:active {
+    background-color: #dd2c05; /* Color más oscuro al hacer clic */
+    transform: translateY(0); /* Vuelve a su posición original */
+}
+
+/* Sombra sutil */
+.volver-btn:focus {
+    outline: none; /* Eliminar el borde azul */
+    box-shadow: 0 0 10px #ff5900; /* Sombra azul */
 }
