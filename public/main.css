@@ -288,3 +288,36 @@ footer {
     outline: none; /* Eliminar el borde azul */
     box-shadow: 0 0 10px #ff5900; /* Sombra azul */
 }
+h2, h3, h4, p, label, .nav-link {
+    color: white !important; /* Asegurarse de que el texto sea blanco */
+}
+#map {
+    border-radius: 15px;  /* Bordes redondeados */
+    overflow: hidden;     /* Asegura que el contenido del mapa no se desborde */
+}
+/* Efecto glass para los campos del formulario */
+.form-control, textarea.form-control {
+    background: rgba(255, 255, 255, 0.60); /* menos transparencia */
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 10px;
+    backdrop-filter: blur(8px);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    color: #000;
+    transition: 0.3s ease;
+}
+
+/* Efecto glass más fuerte para el botón */
+.btn-success {
+    background: rgba(40, 167, 69, 0.5); /* color verde con más transparencia */
+    border: 1px solid rgba(40, 167, 69, 0.3);
+    backdrop-filter: blur(10px);
+    color: #fff;
+    font-weight: bold;
+    box-shadow: 0 4px 15px rgba(40, 167, 69, 0.4);
+    transition: 0.3s ease;
+}
+
+.btn-success:hover {
+    background: rgba(40, 167, 69, 0.7);
+    box-shadow: 0 6px 20px rgba(40, 167, 69, 0.5);
+}
