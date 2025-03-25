@@ -321,3 +321,64 @@ h2, h3, h4, p, label, .nav-link {
     background: rgba(40, 167, 69, 0.7);
     box-shadow: 0 6px 20px rgba(40, 167, 69, 0.5);
 }
+
+/* Fondo del formulario con fondo transparente y efecto glass */
+#register-form {
+    background: rgba(255, 255, 255, 0.3); /* Fondo semi-transparente */
+    border-radius: 10px;
+    backdrop-filter: blur(8px); /* Efecto de desenfoque */
+    padding: 20px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+/* Efecto glass para los campos del formulario */
+#register-form .form-control, #register-form textarea.form-control, #register-form input, #register-form select {
+    background: rgba(255, 255, 255, 0.60); /* Fondo más transparente */
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 10px;
+    backdrop-filter: blur(8px);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    color: #000;
+    transition: 0.3s ease;
+    padding: 10px;
+}
+
+/* Estilo del botón de registro */
+#register-form button {
+    background: rgba(108, 92, 231, 0.5); /* Morado translúcido */
+    border: 1px solid rgba(108, 92, 231, 0.3);
+    backdrop-filter: blur(8px);
+    color: #fff;
+    font-weight: bold;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(108, 92, 231, 0.4);
+    transition: 0.3s ease;
+    padding: 10px 20px;
+    cursor: pointer;
+}
+
+/* Efecto hover para el botón */
+#register-form button:hover {
+    background: rgba(108, 92, 231, 0.7);
+    box-shadow: 0 6px 20px rgba(108, 92, 231, 0.5);
+}
+
+/* Estilo de los labels para que se vean bien sobre el fondo */
+#register-form label {
+    color: #fff; /* Color blanco para los labels */
+    font-weight: bold;
+    margin-bottom: 8px;
+    display: block;
+}
+
+/* Ajuste de los campos select para mantener consistencia */
+#register-form select {
+    background: rgba(255, 255, 255, 0.60); /* Mismo fondo */
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    backdrop-filter: blur(8px);
+    color: #000;
+    padding: 10px;
+    border-radius: 10px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    transition: 0.3s ease;
+}

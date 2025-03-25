@@ -35,7 +35,42 @@
         </div>
     </nav>
 
+<script>
+// Función para obtener el admin_id del usuario autenticado
+async function obtenerAdminId() {
+    const token = localStorage.getItem('token');
+    
+    if (!token) {
+        console.error('Token de autenticación no encontrado');
+        alert('Token de autenticación no encontrado. Por favor, inicie sesión nuevamente.');
+        window.location.href = 'login.html';
+        return null;
+    }
 
+    try {
+        const decoded = JSON.parse(atob(token.split('.')[1]));  // Decodifica el JWT
+        console.log('Datos decodificados:', decoded);  
+        return decoded.id;  // Suponiendo que el JWT contiene un campo "adminId"
+    } catch (e) {
+        console.error("Error al decodificar el token:", e);
+        alert("Token inválido. Inicie sesión nuevamente.");
+        window.location.href = 'login.html';
+        return null;
+    }
+}
+
+document.addEventListener("DOMContentLoaded", function() {
+    obtenerAdminId().then(adminId => {
+        if (adminId) {
+            console.log('ID del administrador:', adminId);  
+        }
+    }).catch(error => {
+        console.error("Error al obtener el adminId:", error);
+    });
+});
+
+
+</script>
 
     <div class="container mt-5">
         <h2>Registrar Tienda</h2>
@@ -105,44 +140,54 @@
                 });
         }
 
-        // Función para manejar el envío del formulario
-        function registrarTienda(event) {
-    event.preventDefault();
+// Función para manejar el envío del formulario
+async function registrarTienda(event) {
+            event.preventDefault();
 
-    let nombre = document.getElementById('nombreTienda').value;
-    let direccion = document.getElementById('direccionTienda').value;
-    let descripcion = document.getElementById('descripcionTienda').value;
-    let imagen = document.getElementById('imagenURL').value;
+            let nombre = document.getElementById('nombreTienda').value;
+            let direccion = document.getElementById('direccionTienda').value;
+            let descripcion = document.getElementById('descripcionTienda').value;
+            let imagen = document.getElementById('imagenURL').value;
 
-    let tiendaData = {
-        nombre: nombre,
-        direccion: direccion,
-        descripcion: descripcion,
-        imagen: imagen
-    };
+            let adminId = await obtenerAdminId();
+            if (!adminId) {
+                alert("No se pudo obtener el ID del administrador.");
+                return;
+            }
 
-    fetch('http://localhost:3000/guardar_tienda', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(tiendaData)
-    })
-    .then(response => response.json())
-    .then(data => {
-        console.log(data);
-        if (data.exito) {
-            alert(data.mensaje);
-            document.getElementById('formTienda').reset(); // limpia el formulario
-        } else {
-            alert("Error: " + data.mensaje);
+            let tiendaData = {
+                nombre: nombre,
+                direccion: direccion,
+                descripcion: descripcion,
+                imagen: imagen,
+                admin_id: adminId
+            };
+
+            let token = localStorage.getItem('token');
+
+            fetch('http://localhost:3000/guardar_tienda', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify(tiendaData)
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+                if (data.exito) {
+                    alert(data.mensaje);
+                    document.getElementById('formTienda').reset();
+                } else {
+                    alert("Error: " + data.mensaje);
+                }
+            })
+            .catch(error => {
+                console.error("Error en la solicitud:", error);
+                alert("Hubo un problema al registrar la tienda.");
+            });
         }
-    })
-    .catch(error => {
-        console.error("Error en la solicitud:", error);
-        alert("Hubo un problema al registrar la tienda.");
-    });
-}
 
         // Agregar el evento submit al formulario
         document.getElementById('formTienda').addEventListener('submit', registrarTienda);
