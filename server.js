@@ -203,6 +203,26 @@ app.post("/agregar_producto", async (req, res) => {
     res.status(200).json({ message: "Producto agregado correctamente" });
   });
 
+// 🟢 Obtener productos de una tienda
+app.get("/productos/:tiendaId", verificarToken, async (req, res) => {
+    const tiendaId = req.params.tiendaId;
+
+    // Consultar los productos de la tienda en la base de datos
+    const { data: productos, error } = await supabase
+        .from("productos")
+        .select("*")
+        .eq("tienda_id", tiendaId);  // Filtrar por la tienda seleccionada
+
+    if (error) {
+        console.error("Error al obtener productos:", error);
+        return res.status(500).json({ error: "Error al obtener productos", details: error.message });
+    }
+
+    res.status(200).json(productos);
+});
+
+
+
 // 🟢 REGISTRAR USUARIO
 app.post("/register", async (req, res) => {
     const { nombre, email, password, tipo } = req.body;
@@ -338,6 +358,54 @@ app.post("/crear_pedido", async (req, res) => {
   
     res.status(201).json({ message: "Pedido creado exitosamente" });
   });
+
+// 🟢 OBTENER PEDIDOS
+app.get("/productos_con_pedidos", async (req, res) => {
+    const tienda = req.query.tienda;
+    
+    if (!tienda) {
+      return res.status(400).json({ error: "Falta el nombre de la tienda en la consulta" });
+    }
+    
+    const { data: tiendaData, error: tiendaError } = await supabase
+      .from("tiendas")
+      .select("id")
+      .eq("nombre", tienda)
+      .single();
+    
+    if (tiendaError || !tiendaData) {
+      return res.status(404).json({ error: "Tienda no encontrada" });
+    }
+    
+    const { data: productos, error: productosError } = await supabase
+    .from("productos")
+    .select("id, nombre, descripcion, precio, unidades, imagen, count(pedidos.id) as numero_pedidos")
+    .eq("tienda_id", tiendaData.id)
+    .leftJoin('pedidos', 'productos.id', 'pedidos.producto_id')
+    .group('productos.id');
+  
+    if (productosError) {
+      console.error("Error al obtener productos:", productosError);
+      return res.status(500).json({ error: "Error en el servidor" });
+    }
+    
+    // Agregar el número de pedidos a cada producto
+    for (const producto of productos) {
+      const { data: pedidos, error: pedidosError } = await supabase
+        .from("pedidos")
+        .select("id")
+        .eq("producto_id", producto.id);
+  
+      if (pedidosError) {
+        return res.status(500).json({ error: "Error al obtener pedidos para el producto" });
+      }
+  
+      producto.num_pedidos = pedidos.length; // El número de pedidos
+    }
+  
+    res.json(productos);
+  });
+
 
 app.listen(port, () => {
   console.log(`Servidor escuchando en http://localhost:${port}`);

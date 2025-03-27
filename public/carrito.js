@@ -23,22 +23,37 @@ function mostrarCarrito() {
         total += subtotal;
 
         let div = document.createElement("div");
-        div.classList.add("col-md-4");
-        div.innerHTML = `
-            <div class="card">
-                <img src="${producto.imagen}" class="card-img-top" alt="${producto.nombre}">
-                <div class="card-body">
-                    <h5 class="card-title">${producto.nombre}</h5>
-                    <p class="text-success">$${producto.precio}</p>
-                    <p>Cantidad: 
-                        <button class="btn btn-sm btn-secondary disminuir" data-index="${index}">-</button>
-                        <span>${producto.cantidad}</span>
-                        <button class="btn btn-sm btn-secondary aumentar" data-index="${index}">+</button>
-                    </p>
-                    <p>Subtotal: $${subtotal.toFixed(2)}</p>
-                    <button class="btn btn-danger eliminar" data-index="${index}">Eliminar</button>
-                </div>
-            </div>
+div.classList.add("d-flex", "align-items-center", "mb-3", "border", "p-3", "rounded");
+div.style = `
+    background: rgba(79, 78, 78, 0.28);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-radius: 15px;
+    padding: 20px;
+    gap: 15px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+`;
+div.style.gap = "15px";
+div.innerHTML = `
+    <img src="${producto.imagen}" alt="${producto.nombre}" style="width: 80px; height: auto; object-fit: cover; border-radius: 8px;">
+
+    <div class="flex-grow-1 text-white">
+        <h5 class="mb-1" style="font-size: 1.2rem;">${producto.nombre}</h5>
+        <p class="mb-1" style="font-size: 1rem;">$${producto.precio.toFixed(2)} x ${producto.cantidad} = $${subtotal.toFixed(2)}</p>
+        
+        <div class="d-flex align-items-center gap-2 mt-2">
+            <button class="btn btn-sm btn-outline-light disminuir" data-index="${index}">
+                <i class="bi bi-dash-lg"></i>
+            </button>
+            <span style="font-size: 1.1rem;">${producto.cantidad}</span>
+            <button class="btn btn-sm btn-outline-light aumentar" data-index="${index}">
+                <i class="bi bi-plus-lg"></i>
+            </button>
+            <button class="btn btn-sm btn-danger eliminar ms-3" data-index="${index}">
+                <i class="bi bi-trash3-fill"></i>
+            </button>
+        </div>
+    </div>
         `;
         contenedor.appendChild(div);
     });

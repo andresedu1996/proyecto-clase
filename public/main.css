@@ -1,5 +1,5 @@
 body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
     position: relative;
     background-color: #f0f0f0; /* Color de fondo para el contenido */
     min-height: 100vh;
@@ -54,7 +54,37 @@ h2 {
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
     overflow: hidden;
+    text-align: center;
+    color: white; /* Texto blanco por defecto */
 }
+
+/* Asegurar que los textos dentro de card sean blancos */
+.card-title,
+.card-text,
+.card-body p,
+.card-body h5 {
+    color: white !important;
+}
+
+/* Precio: texto blanco y tamaño más grande */
+.card-body p.text-success {
+    color: white !important;
+    font-size: 1.25rem; /* Aumenta el tamaño */
+    font-weight: bold;
+}
+
+/* Título del producto más grande */
+.card-title {
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+/* Descripción un poco más clara */
+.card-text {
+    color: #cccccc !important;
+    font-size: 1rem;
+}
+
 
 @keyframes aparecer {
     to {
@@ -65,6 +95,10 @@ h2 {
 
 .card-body {
     padding: 15px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
 }
 
 .card button {
@@ -143,58 +177,103 @@ footer {
         width: 30%;
     }
 }
-/* Mantener los estilos de AG Grid pero ajustar la apariencia */
-.ag-theme-alpine .ag-header-cell {
-    background-color: #161616; /* Cambiar color de fondo de las cabeceras */
+
+/* === Estilo Glassmorphism para AG Grid === */
+#myGrid {
+    width: 100%;
+    max-width: 1200px;
+    height: 100%;
+    max-height: 80vh;
+    border-radius: 20px;
+    overflow: hidden;
+    backdrop-filter: blur(12px);
+    background: rgba(255, 255, 255, 0.1);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  }
+  
+  .ag-root-wrapper,
+  .ag-root {
+    background-color: transparent !important;
+    backdrop-filter: blur(10px);
+  }
+
+  /* === AG Grid Glassmorphism Theme === */
+  .ag-theme-alpine {
+    --ag-background-color: transparent;
+    --ag-header-background-color: rgba(0, 0, 0, 0.4);
+    --ag-header-foreground-color: white;
+    --ag-row-hover-color: rgba(248, 249, 250, 0.9);
+    --ag-odd-row-background-color: rgba(255, 255, 255, 0.03);
+    --ag-border-color: rgba(255, 255, 255, 0.1);
+  
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Cabecera */
+  .ag-theme-alpine .ag-header-cell {
+    background-color: rgba(22, 22, 22, 0.8);
     font-weight: bold;
-    font-size: 14px; /* Cambiar tamaño de fuente en las cabeceras */
-    color: white; /* Cambiar color de texto en las cabeceras */
-    text-align: center; /* Centrar texto en las cabeceras */
-}
-.ag-theme-alpine .ag-row {
-    background-color: #ffffff; /* Cambiar fondo de las filas */
-}
-.ag-theme-alpine .ag-row-even {
-    background-color: #f9f9f9; /* Cambiar color de las filas pares */
-}
-.ag-theme-alpine .ag-cell {
-    font-size: 14px; /* Cambiar tamaño de fuente en las celdas */
-}
-/* Estilo al pasar el mouse sobre las filas */
-.ag-row-hover {
-    background-color: #f8f9fa; /* Color claro para resaltar */
-}
-
-/* Estilo para las filas alternadas */
-.ag-row:nth-child(even) {
-    background-color: #f8f9fa; /* Color alternado en las filas */
-}
-
-/* Estilo al pasar el mouse sobre las celdas */
-.ag-cell-focus {
-    border: 2px solid #007bff; /* Borde azul al seleccionar celda */
-}
-
-/* Estilo de las filas al pasar el mouse */
-.ag-row-hover .ag-cell {
-    background-color: #e9ecef; /* Color claro al pasar el mouse sobre la celda */
-}
-
-/* Estilo para las celdas con números */
-.ag-cell-number {
-    text-align: right; /* Alinear los números a la derecha */
-}
-
-/* Ajustar la altura de las filas en el grid */
-.ag-row {
-    height: 60px !important; /* Aumentar la altura de las filas */
-}
-/* Estilo para las celdas de la tabla */
-.ag-cell {
-    padding: 5px; /* Reduce el espaciado interno */
-    font-size: 14px; /* Tamaño de fuente */
-    text-align: center; /* Centrado de texto */
-}
+    font-size: 14px;
+    color: white;
+    text-align: center;
+    border: none;
+    border-radius: 5px;
+  }
+  
+  /* Filas */
+  .ag-theme-alpine .ag-row {
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 5px;
+    height: 45px !important;
+  }
+  .ag-theme-alpine .ag-row-even {
+    background-color: rgba(248, 249, 250, 0.6);
+  }
+  .ag-theme-alpine .ag-row-hover,
+  .ag-theme-alpine .ag-row:hover {
+    background-color: rgba(248, 249, 250, 0.6);
+  }
+  
+  /* Celdas */
+  .ag-theme-alpine .ag-cell {
+    padding: 4px;
+    font-size: 14px;
+    text-align: center;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    font-weight: bold;
+    color: rgb(15, 15, 15);
+    border-radius: 5px;
+    background-color: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(6px);
+    transition: background-color 0.3s ease;
+  }
+  .ag-theme-alpine .ag-cell:hover {
+    background-color: rgba(248, 249, 250, 0.3);
+  }
+  
+  /* Wrapper general */
+  .grid-wrapper {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    padding: 20px;
+    overflow: auto; /* Habilita el scroll si es necesario */
+  }
+  
+  /* Responsive */
+  @media (max-width: 768px) {
+    .ag-theme-alpine .ag-cell,
+    .ag-theme-alpine .ag-header-cell {
+      font-size: 12px;
+      padding: 4px;
+    }
+  }
 
 /* Contenedor del formulario */
 #register-form {
@@ -250,7 +329,7 @@ footer {
 #totalConEnvio {
     font-weight: bold;
     font-size: 1.2em;
-    color: #1a0c00; /* Puedes cambiar el color según tu diseño */
+    color: #eeeeee; /* Puedes cambiar el color según tu diseño */
 }
 
 .total-container {
@@ -382,3 +461,121 @@ h2, h3, h4, p, label, .nav-link {
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
     transition: 0.3s ease;
 }
+
+/* Estilo de los campos Dashboard*/
+/* Botones glassmorphism */
+.glass-btn {
+    background: rgba(142, 141, 141, 0.391);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: white;
+    backdrop-filter: blur(22px);
+    border-radius: 16px;
+    padding: 15px 25px;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: left;
+    gap: 10px;
+    transition: all 0.3s ease;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+  }
+  
+  .glass-btn:hover {
+    background: rgba(255, 255, 255, 0.7);
+    color: #000;
+  }
+  
+  /* Select estilo glass */
+/* Select estilo glass */
+#tiendaSelect {
+    background: rgba(255,255,255,0.3);
+    backdrop-filter: blur(52px);    
+    color: white;
+    border-radius: 16px;
+    padding: 15px 25px;
+    border: 1px solid rgba(255,255,255,0.3);
+    box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+    width: 100%; /* Aseguramos que ocupe todo el ancho disponible de su columna */
+  }
+  
+  
+  /* Hacer que el botón use todo el ancho de su columna */
+.glass-btn.w-100 {
+    justify-content: center;
+  }
+  /* Texto blanco para el label */
+  label[for="tiendaSelect"] {
+    color: white;
+  }
+  #myGrid {
+    height: 400px;
+    width: 100%;
+}
+.glass-card {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    border-radius: 1rem;
+    padding: 2rem;
+    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+}
+
+.glass-input {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.glass-input::placeholder {
+    color: #ccc;
+}
+
+.glass-btn, .glass-btn-danger, .glass-btn-success {
+    border: none;
+    padding: 10px 20px;
+    border-radius: 12px;
+    font-weight: bold;
+    backdrop-filter: blur(10px);
+    color: white;
+    transition: 0.3s ease;
+}
+.glass-btn-success {
+    background: rgba(40, 167, 69, 0.25);
+}
+
+.glass-btn-danger {
+    background: rgba(220, 53, 69, 0.25);
+}
+
+.glass-btn:hover,
+.glass-btn-danger:hover,
+.glass-btn-success:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.414);
+    color: white;
+}
+/* Cambia el color del texto a negro cuando el input está enfocado */
+.glass-input:focus {
+    
+    background: rgba(255, 255, 255, 0.3);
+}
+.d-flex {
+    display: flex;
+}
+.flex-grow-1 {
+    flex-grow: 1;
+}
+.gap-2 {
+    gap: 0.5rem;
+}
+.ms-3 {
+    margin-left: 1rem;
+}
+html, body {
+    height: 100%;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+  }
+main {
+    flex: 1; /* Esto empuja el footer hacia abajo */
+  }

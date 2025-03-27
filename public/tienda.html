@@ -115,12 +115,12 @@
 
                     // Crear el botón de agregar al carrito
                     let button = document.createElement("button");
-                    button.classList.add("btn", "btn-primary", "agregar-carrito");
-                    button.setAttribute("data-id", producto.ID);
-                    button.setAttribute("data-nombre", producto.nombre);
-                    button.setAttribute("data-precio", producto.precio);
-                    button.setAttribute("data-imagen", producto.imagen);
-                    button.innerText = "Agregar al Carrito";
+button.classList.add("glass-btn", "agregar-carrito");
+button.setAttribute("data-id", producto.ID);
+button.setAttribute("data-nombre", producto.nombre);
+button.setAttribute("data-precio", producto.precio);
+button.setAttribute("data-imagen", producto.imagen);
+button.innerHTML = `<i class="bi bi-cart-plus-fill"></i> Agregar al Carrito`;
 
                     // Agregar todos los elementos al card
                     cardBody.appendChild(title);

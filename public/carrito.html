@@ -35,26 +35,40 @@
     </nav>
 
     <main class="container mt-4">
-        <h2>🛒 Carrito de Compras</h2>
-        <div id="carrito" class="row"></div>
-  
+        <div class="glass-card p-4">
+            <h2>🛒 Carrito de Compras</h2>
+            <div id="carrito" class="row"></div>
 
-      
-        <h3>Envia desde nuestro centro de distribucion principal a tu direccion</h3>
-        <p>*Los productos llegan a nuetro centro de distribucion a tu direccion el costo de envio varia segun la distancia</p>
-        <label for="direccion">Dirección de envío:</label>
-        <input type="text" id="direccion" placeholder="Ingresa tu dirección" required>
-        <button onclick="calcularRuta()" class="btn btn-primary mt-2">Calcular Ruta</button>
-        <div id="map" style="width: 100%; height: 500px; margin-top: 10px;"></div>
-        <p>Costo de Envío: L<span id="costoEnvio">0.00</span></p>
-        <h4>Sub-Total: L<span id="total">0.00</span></h4>
+            <hr class="border-white">
+            <h3>📦 Envío desde nuestro centro de distribución</h3>
+            <p>*Los productos llegan desde nuestro centro a tu dirección. El costo varía según la distancia.</p>
+
+            <div class="mb-3">
+                <label for="direccion" class="form-label">Dirección de envío:</label>
+                <input type="text" id="direccion" class="form-control glass-input text-white" placeholder="Ingresa tu dirección" required>
+            </div>
+            <!-- Botón Calcular Ruta -->
+<button onclick="calcularRuta()" class="btn glass-btn mt-2 mb-3">
+    <i class="bi bi-geo-alt-fill me-1"></i> Calcular Ruta
+</button>
+
+            <div id="map" class="mb-3" style="width: 100%; height: 500px; border-radius: 1rem; overflow: hidden;"></div>
+
+            <p><strong>Costo de Envío:</strong> L<span id="costoEnvio">0.00</span></p>
+            <h4>Sub-Total: L<span id="total">0.00</span></h4>
        
 
-        <div class="mt-4 text-end">
-            <h4>Total con Envío: L<span id="totalConEnvio">0.00</span></h4>
-            <button class="btn btn-danger" id="vaciar-carrito">Vaciar Carrito</button>
-            <button class="btn btn-success" id="realizar-pedido">Realizar Pedido</button>
-        </div>
+            <div class="mt-4 text-end">
+                <h4><strong>Total con Envío:</strong> L<span id="totalConEnvio">0.00</span></h4>
+                    <!-- Botón Vaciar Carrito -->
+    <button class="btn glass-btn-danger me-2" id="vaciar-carrito">
+        <i class="bi bi-trash-fill me-1"></i> Vaciar Carrito
+    </button>
+    <!-- Botón Realizar Pedido -->
+    <button class="btn glass-btn-success" id="realizar-pedido">
+        <i class="bi bi-cart-check-fill me-1"></i> Realizar Pedido
+    </button>
+            </div>
     </main>
 
     <script src="https://js.stripe.com/v3/"></script>
