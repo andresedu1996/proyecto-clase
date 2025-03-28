@@ -140,30 +140,25 @@ button.innerHTML = `<i class="bi bi-cart-plus-fill"></i> Agregar al Carrito`;
                 const botonesCarrito = document.querySelectorAll('.agregar-carrito');
                 botonesCarrito.forEach(boton => {
                     boton.addEventListener('click', function () {
-                        const productoId = this.getAttribute('data-id');
-                        const productoNombre = this.getAttribute('data-nombre');
-                        const productoPrecio = parseFloat(this.getAttribute('data-precio'));
-                        const productoImagen = this.getAttribute('data-imagen');
+const productoId = this.getAttribute('data-id').toString();
+const productoNombre = this.getAttribute('data-nombre');
+const productoPrecio = parseFloat(this.getAttribute('data-precio'));
+const productoImagen = this.getAttribute('data-imagen');
 
-                        // Obtener el carrito actual del localStorage
-                        let carrito = JSON.parse(localStorage.getItem('carrito')) || [];
+// Obtener el carrito actual del localStorage
+let carrito = JSON.parse(localStorage.getItem('carrito')) || [];
 
-                        // Verificar si ya existe en el carrito
-                        const index = carrito.findIndex(item => item.id === productoId);
-                        if (index !== -1) {
-                            carrito[index].cantidad += 1;
-                        } else {
-                            carrito.push({
-                                id: productoId,
-                                nombre: productoNombre,
-                                precio: productoPrecio,
-                                imagen: productoImagen,
-                                cantidad: 1
-                            });
-                        }
+// Buscar si ya existe el producto en el carrito por ID
+carrito.push({
+    id: productoId,
+    nombre: productoNombre,
+    precio: productoPrecio,
+    imagen: productoImagen,
+    cantidad: 1
+});
 
-                        // Guardar de nuevo en localStorage
-                        localStorage.setItem('carrito', JSON.stringify(carrito));
+// Guardar el carrito actualizado
+localStorage.setItem('carrito', JSON.stringify(carrito));
 
                         // Alerta de éxito
                         Swal.fire({

@@ -16,7 +16,8 @@ body::after {
     background-image: url('background.jpg');
     background-size: cover;
     background-position: center;
-    background-attachment: fixed;
+    background-attachment: scroll;
+    background-color: #272500;
     filter: blur(8px); /* Controla la intensidad del blur */
     z-index: -1; /* Asegura que la imagen esté detrás del contenido */
     animation: gradientBG 15s ease infinite;
@@ -143,7 +144,9 @@ footer {
 }
 
 .navbar .nav-link:hover {
-    color: #ffb347 !important; /* Un tono cálido que combine con tu estilo general */
+    
+    transform: scale(1.05);
+    color: rgba(219, 166, 254, 0.832)!important;
 }
 
 #productos {
@@ -311,19 +314,23 @@ footer {
 
 /* Botón */
 #register-form button {
-    width: 100%;
-    padding: 12px;
-    margin-top: 20px;
-    background-color: #0d6efd;
+    background: rgba(142, 141, 141, 0.391);
+    border: 1px solid rgba(255, 255, 255, 0.2);
     color: white;
-    border: none;
-    border-radius: 6px;
-    font-weight: bold;
-    transition: background-color 0.3s ease;
+    backdrop-filter: blur(22px);
+    border-radius: 16px;
+    padding: 15px 25px;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: left;
+    gap: 10px;
+    transition: all 0.3s ease;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.2);
 }
 
 #register-form button:hover {
-    background-color: #084cdf;
+    background: rgba(255, 255, 255, 0.7);
+    color: #000;
 }
 
 #totalConEnvio {
@@ -337,11 +344,13 @@ footer {
     margin-right: 20px;
     font-size: 1.1em;
 }
+
+
 /* Estilización base del enlace */
 .volver-btn {
     display: inline-block;
     padding: 10px 20px;
-    background-color: #ff5900; /* Azul del fondo */
+    background-color: #644737; /* Azul del fondo */
     color: white;
     text-align: center;
     text-decoration: none; /* Eliminar el subrayado */
@@ -352,20 +361,24 @@ footer {
 
 /* Efecto al pasar el ratón */
 .volver-btn:hover {
-    background-color: #b96639; /* Color más oscuro */
-    transform: translateY(-3px); /* Sombra de levantamiento */
+    transform: scale(1.05);
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.414);
+    color: rgb(85, 85, 85);
+    
 }
 
 /* Efecto al hacer clic */
 .volver-btn:active {
-    background-color: #dd2c05; /* Color más oscuro al hacer clic */
-    transform: translateY(0); /* Vuelve a su posición original */
+    transform: scale(1.05);
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.414);
+    color: rgb(85, 85, 85);
 }
 
 /* Sombra sutil */
 .volver-btn:focus {
-    outline: none; /* Eliminar el borde azul */
-    box-shadow: 0 0 10px #ff5900; /* Sombra azul */
+    transform: scale(1.05);
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.414);
+    color: rgb(85, 85, 85);
 }
 h2, h3, h4, p, label, .nav-link {
     color: white !important; /* Asegurarse de que el texto sea blanco */
@@ -420,26 +433,30 @@ h2, h3, h4, p, label, .nav-link {
     color: #000;
     transition: 0.3s ease;
     padding: 10px;
+    gap: 10px;
 }
 
 /* Estilo del botón de registro */
 #register-form button {
-    background: rgba(108, 92, 231, 0.5); /* Morado translúcido */
-    border: 1px solid rgba(108, 92, 231, 0.3);
-    backdrop-filter: blur(8px);
-    color: #fff;
-    font-weight: bold;
-    border-radius: 10px;
-    box-shadow: 0 4px 15px rgba(108, 92, 231, 0.4);
-    transition: 0.3s ease;
-    padding: 10px 20px;
+    background: rgba(142, 141, 141, 0.391);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: white;
+    backdrop-filter: blur(22px);
+    border-radius: 16px;
+    padding: 10px 25px;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: left;
+    gap: 20px;
+    transition: all 0.3s ease;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.2);
     cursor: pointer;
 }
 
 /* Efecto hover para el botón */
 #register-form button:hover {
-    background: rgba(108, 92, 231, 0.7);
-    box-shadow: 0 6px 20px rgba(108, 92, 231, 0.5);
+    background: rgba(255, 255, 255, 0.7);
+    color: #000;
 }
 
 /* Estilo de los labels para que se vean bien sobre el fondo */
@@ -491,7 +508,7 @@ h2, h3, h4, p, label, .nav-link {
     backdrop-filter: blur(52px);    
     color: white;
     border-radius: 16px;
-    padding: 15px 25px;
+    padding: 10px 25px;
     border: 1px solid rgba(255,255,255,0.3);
     box-shadow: 0 6px 20px rgba(0,0,0,0.2);
     width: 100%; /* Aseguramos que ocupe todo el ancho disponible de su columna */
@@ -551,7 +568,7 @@ h2, h3, h4, p, label, .nav-link {
 .glass-btn-success:hover {
     transform: scale(1.05);
     box-shadow: 0 0 10px rgba(255, 255, 255, 0.414);
-    color: white;
+    color: rgb(85, 85, 85);
 }
 /* Cambia el color del texto a negro cuando el input está enfocado */
 .glass-input:focus {

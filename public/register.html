@@ -34,7 +34,8 @@
     </nav>
 
 
-
+    <div class="container mt-5">
+        <h2>Registrarse</h2>
 <form id="register-form">
     <label>Nombre:</label>
     <input type="text" id="nombre" required>
@@ -52,8 +53,10 @@
         <option value="admin">superadmin</option>
     </select>
     <br>
-    <button type="submit">Registrar</button>
+    <br>
+    <button type="submit" class="glass-btn">Registrar</button>
 </form>
+</div>
 
 <script>
     document.getElementById("register-form").addEventListener("submit", async (event) => {
