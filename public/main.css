@@ -8,7 +8,7 @@ body {
 /* Pseudo-elemento para aplicar el blur a la imagen de fondo */
 body::after {
     content: "";
-    position: absolute;
+    position: fixed;
     top: 0;
     left: 0;
     right: 0;

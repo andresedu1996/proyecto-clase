@@ -169,7 +169,7 @@ app.get("/productos", async (req, res) => {
     res.json(productos);
   });
 
-// 🟢 AGREGAR PRODUCTO
+// 🟢 AGREGAR PRODUCTO a tienda
 app.post("/agregar_producto", async (req, res) => {
     const { tienda_id, nombre, descripcion, precio, unidades, imagen } = req.body;
   
@@ -317,8 +317,8 @@ app.post("/create-checkout-session", async (req, res) => {
       payment_method_types: ["card"],
       line_items,
       mode: "payment",
-      success_url: "http://localhost:3000/success",
-      cancel_url: "http://localhost:3000/cancel",
+      success_url: "http://localhost:3000/success.html",
+      cancel_url: "http://localhost:3000/cancel.html",
     });
 
     res.json({ id: session.id });
