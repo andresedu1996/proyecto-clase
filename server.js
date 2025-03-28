@@ -292,41 +292,61 @@ app.post("/pagar", async (req, res) => {
 
 // 🟢 CHECKOUT CON STRIPE
 app.post("/create-checkout-session", async (req, res) => {
-  const { carrito, direccion, costoEnvio } = req.body;
-
-  if (!carrito || !Array.isArray(carrito) || carrito.length === 0) {
-    return res.status(400).json({ error: "Carrito inválido" });
-  }
-
-  let total = carrito.reduce((sum, producto) => sum + producto.precio * 100 * producto.cantidad, 0);
-  if (costoEnvio > 0) total += costoEnvio * 100;
-
-  const line_items = carrito.map((producto) => ({
-    price_data: {
-      currency: "usd",
-      product_data: {
-        name: producto.nombre,
+    const { carrito, direccion, costoEnvio, id_usuario } = req.body;
+  
+    if (!carrito || !Array.isArray(carrito) || carrito.length === 0) {
+      return res.status(400).json({ error: "Carrito inválido" });
+    }
+  
+    let total = carrito.reduce((sum, producto) => sum + producto.precio * 100 * producto.cantidad, 0);
+    if (costoEnvio > 0) total += costoEnvio * 100;
+  
+    const line_items = carrito.map((producto) => ({
+      price_data: {
+        currency: "usd",
+        product_data: {
+          name: producto.nombre,
+        },
+        unit_amount: producto.precio * 100,
       },
-      unit_amount: producto.precio * 100,
-    },
-    quantity: producto.cantidad,
-  }));
-
-  try {
-    const session = await stripe.checkout.sessions.create({
-      payment_method_types: ["card"],
-      line_items,
-      mode: "payment",
-      success_url: "http://localhost:3000/success.html",
-      cancel_url: "http://localhost:3000/cancel.html",
-    });
-
-    res.json({ id: session.id });
-  } catch (error) {
-    console.error("Error al crear sesión de checkout:", error);
-    res.status(500).json({ error: "Error al crear sesión de pago" });
-  }
-});
+      quantity: producto.cantidad,
+    }));
+  
+    // Crear el pedido en la base de datos, incluso si es un pago de prueba
+    try {
+      // Inserta el pedido en la base de datos
+      const { data: pedidoData, error: pedidoError } = await supabase
+        .from("pedidos")
+        .insert([
+          {
+            id_usuario,
+            direccion_entrega: direccion,
+            total, // Aquí puedes guardar el total calculado
+            estado: "pendiente", // Puedes añadir un estado para identificar que está pendiente de pago
+          },
+        ])
+        .single();
+  
+      if (pedidoError) {
+        return res.status(500).json({ error: "Error al crear el pedido" });
+      }
+  
+      // Crear la sesión de Stripe
+      const session = await stripe.checkout.sessions.create({
+        payment_method_types: ["card"],
+        line_items,
+        mode: "payment",
+        success_url: "http://localhost:3000/success.html",
+        cancel_url: "http://localhost:3000/cancel.html",
+      });
+  
+      // Regresa el ID de la sesión de checkout
+      res.json({ id: session.id });
+    } catch (error) {
+      console.error("Error al crear sesión de checkout:", error);
+      res.status(500).json({ error: "Error al crear sesión de pago" });
+    }
+  });
 
 // 🟢 CREAR PEDIDO
 app.post("/crear_pedido", async (req, res) => {
@@ -389,23 +409,44 @@ app.get("/productos_con_pedidos", async (req, res) => {
       return res.status(500).json({ error: "Error en el servidor" });
     }
     
-    // Agregar el número de pedidos a cada producto
-    for (const producto of productos) {
-      const { data: pedidos, error: pedidosError } = await supabase
-        .from("pedidos")
-        .select("id")
-        .eq("producto_id", producto.id);
-  
-      if (pedidosError) {
-        return res.status(500).json({ error: "Error al obtener pedidos para el producto" });
-      }
-  
-      producto.num_pedidos = pedidos.length; // El número de pedidos
-    }
-  
-    res.json(productos);
-  });
+    // Devolviendo la respuesta con los productos y el número de pedidos
+    return res.json({ productos });
+});
 
+// Endpoint para obtener productos de un pedido específico
+app.get('/productos_pedido/tienda/:tiendaId', async (req, res) => {
+    const { tiendaId } = req.params; // ID del pedido desde la URL
+  
+    try {
+        // Consulta en Supabase para obtener productos asociados a los pedidos de una tienda
+        const { data, error } = await supabase
+          .from('pedidos_producto')
+          .select(`
+            id_producto,
+            cantidad,
+            productos(nombre, precio),  // Asumiendo que 'productos' es una tabla relacionada
+            pedidos(tienda_id)  // Obtener el 'tienda_id' del pedido
+          `)
+          .eq('pedidos.tienda_id', tiendaId);  // Filtra por el ID de la tienda en la tabla de pedidos
+    
+        // Manejo de errores si la consulta falla
+        if (error) {
+          console.error("Error al obtener productos del pedido:", error);
+          return res.status(500).json({ error: 'Error al obtener productos del pedido' });
+        }
+    
+        // Si no se encuentra ningún producto, enviar una respuesta 404
+        if (!data || data.length === 0) {
+          return res.status(404).json({ error: 'No se encontraron productos para esta tienda' });
+        }
+    
+        // Enviar los datos de los productos asociados a la tienda
+        res.json(data);
+      } catch (error) {
+        console.error('Error inesperado al obtener productos del pedido:', error);
+        res.status(500).json({ error: 'Error interno del servidor' });
+      }
+    });
 
 app.listen(port, () => {
   console.log(`Servidor escuchando en http://localhost:${port}`);
