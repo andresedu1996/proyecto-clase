@@ -39,7 +39,7 @@ div.innerHTML = `
 
     <div class="flex-grow-1 text-white">
         <h5 class="mb-1" style="font-size: 1.2rem;">${producto.nombre}</h5>
-        <p class="mb-1" style="font-size: 1rem;">$${producto.precio.toFixed(2)} x ${producto.cantidad} = $${subtotal.toFixed(2)}</p>
+        <p class="mb-1" style="font-size: 1rem;">L.${producto.precio.toFixed(2)} x ${producto.cantidad} = L.${subtotal.toFixed(2)}</p>
         
         <div class="d-flex align-items-center gap-2 mt-2">
             <button class="btn btn-sm btn-outline-light disminuir" data-index="${index}">

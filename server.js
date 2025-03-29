@@ -311,7 +311,19 @@ app.post("/create-checkout-session", async (req, res) => {
       },
       quantity: producto.cantidad,
     }));
-  
+  // Agrega el costo de envío como una línea más
+if (costoEnvio > 0) {
+  line_items.push({
+    price_data: {
+      currency: "usd",
+      product_data: {
+        name: "Costo de envío",
+      },
+      unit_amount: Math.round(costoEnvio * 100),
+    },
+    quantity: 1,
+  });
+}
     // Crear el pedido en la base de datos, incluso si es un pago de prueba
     try {
       // Inserta el pedido en la base de datos
